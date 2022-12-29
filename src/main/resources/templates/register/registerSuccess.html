@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Eduhash - Education LMS template</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!-- bootstrap.min css -->
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+	<!-- Main Stylesheet -->
+	<link th:href="@{/css/student_register_style.css}" rel="stylesheet">
+	<link th:href="@{/css/responsive.css}" rel="stylesheet">
+</head>
+
+<body id="top-header">
+<main class="site-main page-wrapper woocommerce single single-product">
+	<section class="space-3">
+		<div class="container">
+			<div >
+					<h2 class="font-weight-bold mb-4">学习者注册</h2>
+					<form method="post" class="woocommerce-form woocommerce-form-register register" th:action="@{student/register}">
+
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>账户名&nbsp;<span class="required">*</span></label>
+							<input type="text" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="username" id="" autocomplete="user-name" value="" placeholder="请输入账户名">
+						</p>
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>密码&nbsp;<span class="required">*</span></label>
+							<input type="password" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="password" id="" autocomplete="password" value="" placeholder="请输入密码">
+						</p>
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>邮箱 &nbsp;<span class="required">*</span></label>
+							<input type="email" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="email" id="" autocomplete="email" value="" placeholder="请输入邮箱">
+						</p>
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>联系方式&nbsp;<span class="required">*</span></label>
+							<input type="text" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="phoneNumber" id="" autocomplete="user-name" value="" placeholder="请输入联系方式">
+						</p>
+
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>学校&nbsp;</label>
+							<input type="text" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="schoolName" id="" autocomplete="user-name" value="" placeholder="请输入学校">
+						</p>
+
+						<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+							<label>专业&nbsp;</label>
+							<input type="text" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="major" id="" autocomplete="user-name" value="" placeholder="请输入学校">
+						</p>
+
+						<p class="woocommerce-FormRow form-row">
+							<input type="hidden" id="woocommerce-register-nonce" name="woocommerce-register-nonce" value="b1c661ab82"><input type="hidden" name="_wp_http_referer" value="/my-account/">
+							<button type="submit" class="woocommerce-Button button" name="register" value="Register">注册</button>
+						</p>
+
+					</form>
+			</div>
+		</div>
+	</section>
+	<!--shop category end-->
+</main>
+
+
+</body>
+</html>

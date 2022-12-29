@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="assets/images/favicon.png">
+
+    <!-- CSS
+        ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+    <link th:href="@{/css/personal-info.css}" rel="stylesheet" />
+
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <script th:src="@{/js/numberDeal.js}"></script>
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- sidebar -->
+    <div th:replace="~{commons/commons::sidebar-menu(active='student-info.html')}"></div>
+
+    <!--header-->
+    <div th:replace="~{commons/commons::main_header}"></div>
+
+    <!-- contents -->
+    <div class="main_content">
+        <div class="main_content_inner">
+
+            <div class="container-fluid">
+                <div class="row">
+                    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                        <!--个人信息页-->
+                        <div class="content wide-content">
+                            <div class="container-fluid">
+                                <div class="settings-wrapper" id="pad-wrapper">
+                                    <!-- avatar column -->
+                                    <div class="span3 avatar-box">
+                                        <div class="personal-image">
+                                            <img th:src="@{'/img/avatars/avatar-'+ ${studentInfo.getId()} +'.jpg'}" style="border: 0px;height:100px;border-radius: 50px;"/>
+                                            <p>更换头像          <input type="file" /></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- edit form column -->
+                                    <div class="span7 personal-info">
+
+                                        <h5 class="personal-title">个人信息</h5>
+                                        <form method="post" th:object="${studentInfo}" th:action="@{/student/updateStudentInfo}">
+                                            <input type="hidden" name="id" th:value="${studentInfo.getId()}" />
+                                            <div class="field-box">
+                                                <label>姓名:</label>
+                                                <input class="span5 inline-input" type="text" name="username" th:value="${studentInfo.getUsername()}" />
+                                            </div>
+                                            <div class="field-box">
+                                                <label>邮箱:</label>
+                                                <input class="span5 inline-input" type="text" name="email" th:value="${studentInfo.getEmail()}" />
+                                            </div>
+                                            <div class="field-box">
+                                                <label>联系电话:</label>
+                                                <input class="span5 inline-input" type="text" name="phoneNumber" th:value="${studentInfo.getPhoneNumber()}" />
+                                            </div>
+                                            <div class="field-box">
+                                                <label>学校:</label>
+                                                <input class="span5 inline-input" type="text" name="schoolName" th:value="${studentInfo.getSchoolName()}" />
+                                            </div>
+                                            <div class="field-box">
+                                                <label>专业:</label>
+                                                <input class="span5 inline-input" type="text" name="major" th:value="${studentInfo.getMajor()}" />
+                                            </div>
+                                            <div class="field-box">
+                                                <label>密码:</label>
+                                                <input class="span5 inline-input" type="password" name="password" th:value="${studentInfo.getPassword()}" />
+                                            </div>
+                                            <div class="field-box">
+                                                <label>确认密码:</label>
+                                                <input class="span5 inline-input" type="password" name="password2" th:value="${studentInfo.getPassword()}" />
+                                            </div>
+                                            <button type="submit" class="button danger" name="saveChanges" value="saveChanges" style="margin-left:450px">保存</button>
+                                            <button type="button" class="button disabled" th:onclick="|window.location.href='@{/student/UpdateInfoCancel?student_id=' + ${student_id} + '}' |"  style="margin-right:500px">取消</button>
+<!--                                            <div class="span6 field-box actions">-->
+<!--                -->
+<!--                                            </div>-->
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+
+
+            <!-- footer
+           ================================================== -->
+            <div th:replace="~{commons/commons::footer}"></div>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<!-- For Night mode -->
+<script>
+    (function (window, document, undefined) {
+        'use strict';
+        if (!('localStorage' in window)) return;
+        var nightMode = localStorage.getItem('gmtNightMode');
+        if (nightMode) {
+            document.documentElement.className += ' night-mode';
+        }
+    })(window, document);
+
+
+    (function (window, document, undefined) {
+
+        'use strict';
+
+        // Feature test
+        if (!('localStorage' in window)) return;
+
+        // Get our newly insert toggle
+        var nightMode = document.querySelector('#night-mode');
+        if (!nightMode) return;
+
+        // When clicked, toggle night mode on or off
+        nightMode.addEventListener('click', function (event) {
+            event.preventDefault();
+            document.documentElement.classList.toggle('night-mode');
+            if (document.documentElement.classList.contains('night-mode')) {
+                localStorage.setItem('gmtNightMode', true);
+                return;
+            }
+            localStorage.removeItem('gmtNightMode');
+        }, false);
+
+    })(window, document);
+</script>
+
+
+<!-- javaScripts
+================================================== -->
+<script th:src="@{/js/framework.js}"></script>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/simplebar.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:inline="javascript">
+    function getUnitNumber(value)
+    {
+        let newValue = ['', '', ''];
+        let fr = 1000;
+        const ad = 1;
+        let num = 3;
+        const fm = 1;
+        while (value / fr >= 1) {
+            fr *= 10;
+            num += 1;
+            //console.log('数字', value / fr, 'num:', num);
+        }
+        if (num <= 4) { // 千
+            newValue[1] = '千';
+            newValue[0] = parseInt((value / 1000).toFixed(1)) + '';
+            console.log(newValue[0]);
+        } else if (num <= 8) { // 万
+            const text1 = parseInt(num - 4) / 3 > 1 ? '千万' : '万';
+            // tslint:disable-next-line:no-shadowed-variable
+            const fm = '万' === text1 ? 10000 : 10000000;
+            newValue[1] = text1;
+            newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+            console.log(newValue[0]);
+        } else if (num <= 16) {// 亿
+            let text1 = (num - 8) / 3 > 1 ? '千亿' : '亿';
+            text1 = (num - 8) / 4 > 1 ? '万亿' : text1;
+            text1 = (num - 8) / 7 > 1 ? '千万亿' : text1;
+            // tslint:disable-next-line:no-shadowed-variable
+            let fm = 1;
+            if ('亿' === text1) {
+                fm = 100000000;
+            } else if ('千亿' === text1) {
+                fm = 100000000000;
+            } else if ('万亿' === text1) {
+                fm = 1000000000000;
+            } else if ('千万亿' === text1) {
+                fm = 1000000000000000;
+            }
+            newValue[1] = text1;
+            newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+        }
+        if (value < 1000) {
+            newValue[1] = '';
+            newValue[0] = value + '';
+        }
+        return newValue.join('');
+    }
+    var allFollowedTeachers = [[${allFollowedTeachers}]];
+    //console.log(allFollowedTeachers);
+    var p_li = document.getElementById("div-teacher-info").getElementsByTagName('span');
+    for(var i=0;i<p_li.length;i++) {
+        var allFollowedTeacher = allFollowedTeachers[i];
+        //console.log(allFollowedTeacher);
+        // <p> <span th:text="+' 关注   '+ +' 个视频'"
+        var fan_num = allFollowedTeacher.teacher_follow_num;
+        var video_num = allFollowedTeacher.teacher_video_num;
+        var fan_video_text = getUnitNumber(fan_num) + ' 关注  ' + getUnitNumber(video_num) + ' 个视频';
+        //var p_teacher_info = a_li[i].getElementsByClassName("p-teacher-info");
+        //p_teacher_info.
+        //p_li[i].append("<span> ${fan_video_text}</span> ");
+        //var span_fan_video = $(document.createElement("span")).attr({text:fan_video_text});
+        //console.log(span_fan_video);
+        p_li[i].append(fan_video_text);
+        //p_li[i].append();
+        //console.log(p_teacher_info);
+        //append("<span> " + fan_video_text + "</span>")
+    }
+</script>
+
+</body>
+
+</html>

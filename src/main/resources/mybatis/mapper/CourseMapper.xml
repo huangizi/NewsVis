@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freya.onlinetech.mapper.CourseMapper">
+    <select id="queryCourseById" resultType="Course">
+        select * from course_info where course_id=#{course_id};
+    </select>
+
+    <select id="getStuCourseRecord" resultType="CourseRecord">
+        SELECT course_record.course_record_student_id,course_record.course_record_teacher_id,course_record.course_record_course_id,COUNT(*) AS course_record_num  FROM course_record
+        WHERE course_record.course_record_student_id = #{student_id} AND course_record.course_record_course_id = #{course_id};
+    </select>
+
+    <select id="getStuWatchVideoNum" resultType="_int">
+        SELECT COUNT(*) FROM course_record
+        WHERE course_record.course_record_student_id = #{student_id} AND course_record.course_record_course_id = #{course_id};
+    </select>
+
+    <select id="getCoursesByStuID" resultType="Course">
+        SELECT course_info.* FROM course_info,join_course WHERE join_course.join_course_course_id = course_info.course_id AND join_course.join_course_student_id = #{student_id};
+    </select>
+
+    <select id="getCourseSectionNum" resultType="_int">
+        SELECT COUNT(*) FROM `video_info` WHERE video_course_id = #{course_id}
+    </select>
+
+    <select id="queryLatestCourse" resultType="Course">
+        SELECT * FROM course_info WHERE course_info.course_teacher_id = #{teacher_id} ORDER BY course_add_time DESC LIMIT 1;
+    </select>
+
+    <insert id="addCourse" parameterType="Course">
+        insert into courseinfo(course_id,course_name,course_teacher_id,course_description,course_category,
+                               course_degree,course_times,course_fav_nums,course_image,course_view_num,course_add_time)
+        values (#{course_id},#{course_name},#{course_teacher_id},#{course_description},#{course_category},
+                #{course_degree},#{course_times},#{course_fav_nums},#{course_image},#{course_view_num},#{course_add_time});
+    </insert>
+
+    <select id="queryAllTeacherCourse" resultType="Course">
+        SELECT * FROM course_info WHERE course_info.course_teacher_id = #{teacher_id};
+    </select>
+
+    <select id="getRecommendCourse" resultType="Course">
+        SELECT * FROM course_info ORDER BY course_add_time DESC LIMIT 7;
+    </select>
+
+
+    <update id="updateCourse" parameterType="Course">
+        update courseinfo set course_name=#{course_name},course_teacher_id=#{course_teacher_id},course_description=#{course_description},course_category=#{course_category},
+                              course_degree=#{course_degree},course_times=#{course_times},course_fav_nums=#{course_fav_nums},course_image=#{course_image},
+                              course_view_num=#{course_view_num},course_add_time=#{course_add_time}
+        where course_id=#{course_id};
+    </update>
+
+    <delete id="deleteCourse" parameterType="int">
+        delete from courseinfo where course_id=#{course_id};
+    </delete>
+
+    <select id="queryCourseVideo" resultMap="CourseVideo">
+        SELECT * FROM course_section,course_chapter WHERE  course_chapter.course_id = #{course_id} AND course_section.course_id = #{course_id}
+                                                      and course_section.course_chapter_id = course_chapter.course_chapter_id;
+    </select>
+
+    <select id="queryCourseTeacher" resultType="_int">
+        SELECT course_info.course_teacher_id FROM course_info WHERE course_id = #{course_id};
+    </select>
+
+    <resultMap id="CourseVideo" type="CourseVideo">
+        <result property="course_id" column="course_id"></result>
+        <collection property="chapter" ofType="CourseChapter">
+            <result property="course_chapter_id" column="course_chapter_id"></result>
+            <result property="course_section_num" column="course_section_num"></result>
+            <result property="course_chapter_name" column="course_chapter_name"></result>
+            <collection property="section" ofType="CourseSection">
+                <result property="course_section_id" column="course_section_id"></result>
+                <result property="course_section_name" column="course_section_name"></result>
+                <result property="video_id" column="video_id"></result>
+            </collection>
+        </collection>
+    </resultMap>
+
+</mapper>

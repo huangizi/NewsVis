@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3308/jdbc?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    lazy-initialization: true
+
+mybatis:
+  type-aliases-package: com.freya.onlinetech
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+

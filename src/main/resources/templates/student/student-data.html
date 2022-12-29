@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="assets/images/favicon.png">
+
+    <!-- CSS
+        ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+    <link th:href="@{/css/personal-info.css}" rel="stylesheet" />
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <script th:src="@{/js/numberDeal.js}"></script>
+
+    <link th:href="@{/css/studentData-bootstrap.min.css}" rel='stylesheet' type='text/css' />
+    <!-- Custom CSS -->
+    <link th:href="@{/css/studentData-style.css}" rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" th:href="@{/css/studentData-morris.css}" type="text/css"/>
+    <!-- Graph CSS -->
+    <link th:href="@{/css/studentData-font-awesome.css}" rel="stylesheet">
+    <!-- jQuery -->
+    <script th:src="@{/js/studentData-jquery-2.1.4.min.js}"></script>
+    <!-- //jQuery -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css'/>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css'/>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- sidebar -->
+<!--    <div th:replace="~{commons/commons::sidebar-menu(active='student-info.html')}"></div>-->
+    <div class="main_sidebar" th:fragment="sidebar-menu">
+        <div class="side-overlay" uk-toggle="target: #wrapper ; cls: collapse-sidebar mobile-visible"></div>
+
+        <!-- sidebar header -->
+        <div class="sidebar-header">
+            <h4> Navigation</h4>
+            <span class="btn-close" uk-toggle="target: #wrapper ; cls: collapse-sidebar mobile-visible"></span>
+        </div>
+
+        <!-- sidebar Menu -->
+        <div class="sidebar">
+            <div class="sidebar_innr" data-simplebar>
+
+                <div class="sections">
+                    <h3> 浏览 </h3>
+                    <ul>
+                        <li > <a th:href="@{/studentIndex(student_id=${student_id})}"> <i class="uil-home-alt"></i> 主页 </a></li>
+                        <li > <a th:href="@{/student/studentInfo(student_id=${student_id})}"> <i class="icon-feather-user"></i> 个人信息 </a></li>
+                        <li > <a th:href="@{/course/follow(student_id=${student_id})}"> <i class="uil-users-alt"></i> 关注的课程 </a></li>
+                        <li > <a th:href="@{/course/join(student_id=${student_id})}"> <i class="uil-layers"></i> 参与的课程 </a></li>
+                        <li class="active"> <a th:href="@{/course/join(student_id=${student_id})}"> <i class="icon-feather-activity"></i> 学习数据 </a></li>
+                    </ul>
+                </div>
+
+
+                <div class="sections">
+                    <h3> 关注的教师 </h3>
+                    <ul th:each="teacherFollow:${teacherFollows}">
+                        <li>
+                            <a th:href="@{/teacher/singleChannel(teacher_id=${teacherFollow.getTeacher_id()},student_id=${student_id})}" >
+                                <img th:src="@{'/img/avatars/avatar-'+${teacherFollow.getTeacher_id()}+'.jpg'}" alt="">
+                                [[${teacherFollow.getTeacher_name()}]]
+                                <span class="dot-notiv"></span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- view more subcription-->
+                    <div class="uk-flex uk-flex-center mb-3">
+                        <a th:href="@{/teacher/browseChannals(student_id=${student_id})}" >
+                            <i class="uil-plus mr-2"></i> 更多 </a>
+                    </div>
+
+                </div>
+
+                <div id="foot">
+
+                    <ul>
+                        <li> <a href="#"> 关于作者 </a></li>
+                    </ul>
+                    <div class="foot-content">
+                        <p>版权所有 &copy; 江南大学<strong>资源</strong> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer
+    ================================================== -->
+        <div class="footer" th:fragment="footer">
+            <div class="uk-grid-collapse" uk-grid>
+                <div class="uk-width-expand@s uk-first-column">
+                    <p>版权所有 &copy; 江南大学资源 </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--header-->
+<!--    <div th:replace="~{commons/commons::main_header}"></div>-->
+<!--    style="
+    float: right;
+"-->
+    <div id="main_header" th:fragment="main_header">
+        <header>
+
+            <!-- Logo-->
+            <i class="header-traiger uil-bars"
+               uk-toggle="target: #wrapper ; cls: collapse-sidebar mobile-visible"></i>
+
+            <!-- Logo-->
+            <div id="logo">
+                <a href="#"> <img src="assets/images/logo.png" alt=""></a>
+                <a href="#"> <img src="assets/images/logo-light.png" class="logo-inverse" alt=""></a>
+            </div>
+
+            <!-- form search-->
+<!--            <div class="head_search">-->
+<!--                <form>-->
+<!--                    <div class="head_search_cont">-->
+<!--                        <input value="" type="text" class="form-control"-->
+<!--                               placeholder="Search for Videos, Games, Movies and more.." autocomplete="off">-->
+<!--                        <i class="s_icon uil-search-alt"></i>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Search box dropdown &ndash;&gt;-->
+<!--                    <div uk-dropdown="pos: top;mode:click;animation: uk-animation-slide-bottom-small"-->
+<!--                         class="dropdown-search">-->
+<!--                        &lt;!&ndash; User menu &ndash;&gt;-->
+
+<!--                        <ul class="dropdown-search-list">-->
+<!--                            <li class="list-title"> Recent Searches </li>-->
+<!--                            <li> <a href="single-video.html"> Adobe XD Design Free Tutorial .. </a> </li>-->
+<!--                            <li> <a href="single-video.html"> How to create a basic Sticky HTML element .. </a>-->
+<!--                            </li>-->
+<!--                            <li> <a href="single-video.html"> Learn How to Prototype Faster with Mockplus! in 2020-->
+<!--                            </a> </li>-->
+<!--                            <li> <a href="single-video.html"> Adobe XD Design Tutorial Company Website Landing Page-->
+<!--                                .. </a> </li>-->
+<!--                            <div class="menu-divider">-->
+<!--                                <li class="list-footer"> <a href="your-history.html"> Searches History </a></li>-->
+<!--                        </ul>-->
+
+<!--                    </div>-->
+
+
+<!--                </form>-->
+<!--            </div>-->
+
+            <!-- user icons -->
+<!--            <div class="head_user" style="float: right">-->
+
+<!--                <a href="#" class="btn-upgrade uk-visible@s"> <i class="uil-bolt-alt"></i> Pro</a>-->
+<!--                <a href="#" class="btn-upload uk-visible@s"> <i class="uil-cloud-upload"></i> Upload</a>-->
+
+<!--                &lt;!&ndash; upload dropdown box &ndash;&gt;-->
+<!--                <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"-->
+<!--                     class="dropdown-notifications">-->
+
+<!--                    &lt;!&ndash; notivication header &ndash;&gt;-->
+<!--                    <div class="dropdown-notifications-headline">-->
+<!--                        <h4>Upload Video</h4>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; notification contents &ndash;&gt;-->
+<!--                    <div class="dropdown-notifications-content uk-flex uk-flex-middle uk-flex-center text-center">-->
+
+
+<!--                        <div class="uk-flex uk-flex-column choose-upload  text-center">-->
+<!--                            <img src="assets/images/upload.png" width="70" class="m-auto" alt="">-->
+<!--                            <p class="my-3"> Do you have a video wants to share us <br> please upload her ..-->
+<!--                            </p>-->
+<!--                            <div uk-form-custom>-->
+<!--                                <input type="file">-->
+<!--                                <a href="#" class="button soft-warning small"> Choose file</a>-->
+<!--                            </div>-->
+
+<!--                            <a href="#" class="uk-text-muted mt-3 uk-link"-->
+<!--                               uk-toggle="target: .choose-upload ;  animation: uk-animation-slide-right-small, uk-animation-slide-left-medium; queued: true">-->
+<!--                                Or Import Video </a>-->
+<!--                        </div>-->
+
+<!--                        <div class="uk-flex uk-flex-column choose-upload" hidden>-->
+<!--                            <i class="uil-import icon-large text-muted"></i>-->
+<!--                            <p class="my-3"> Import videos from YouTube <br> Copy / Paste your video link here </p>-->
+<!--                            <form class="uk-grid-small" uk-grid>-->
+<!--                                <div class="uk-width-expand">-->
+<!--                                    <input type="text" class="uk-input uk-form-small" placeholder="Paste link">-->
+<!--                                </div>-->
+<!--                                <div class="uk-width-auto"> <button type="submit" class="button soft-warning">-->
+<!--                                    Import </button> </div>-->
+<!--                            </form>-->
+<!--                            <a href="#" class="uk-text-muted mt-3 uk-link"-->
+<!--                               uk-toggle="target: .choose-upload ; animation: uk-animation-slide-left-small, uk-animation-slide-right-medium; queued: true">-->
+<!--                                Or Upload Video </a>-->
+<!--                        </div>-->
+
+
+
+<!--                    </div>-->
+<!--                    <hr class="m-0">-->
+<!--                    <div class="text-center uk-text-small py-2 uk-text-muted"> Your Video size Must be Maxmium 999MB-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+<!--                &lt;!&ndash; videos feed  &ndash;&gt;-->
+<!--                <a href="#video" class="opts_icon" uk-toggle> <i class="uil-youtube-alt"></i> <span>9+</span>  </a>-->
+
+<!--                &lt;!&ndash; videos feed  offcanvas&ndash;&gt;-->
+<!--                <div id="video" uk-offcanvas="overlay: true ;flip: true">-->
+<!--                    <div class="uk-offcanvas-bar uk-width-large">-->
+
+<!--                        <h3> Your Subscription </h3>-->
+<!--                        <hr class="mb-3" style="margin:0 -20px">-->
+<!--                        <button class="uk-offcanvas-close" type="button" uk-close></button>-->
+
+<!--                        <div class="video-list-small uk-child-width-1-1" uk-grid>-->
+
+<!--                            <div>-->
+<!--                                <a href="single-video.html" class="video-post video-post-list">-->
+<!--                                    &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;-->
+<!--                                    <div class="video-post-thumbnail">-->
+<!--                                        <span class="video-post-count">1.4M</span>-->
+<!--                                        <span class="video-post-time">23:00</span>-->
+<!--                                        <span class="play-btn-trigger"></span>-->
+
+<!--                                        <img src="assets/images/video-thumbal/2.png" alt="">-->
+
+<!--                                    </div>-->
+
+<!--                                    &lt;!&ndash; Blog Post Content &ndash;&gt;-->
+<!--                                    <div class="video-post-content">-->
+<!--                                        <h3> How to create a basic Sticky HTML element..</h3>-->
+<!--                                        <img src="assets/images/avatars/avatar-3.jpg" alt="">-->
+<!--                                        <span class="video-post-user">Jonathan Madano</span>-->
+<!--                                        <span class="video-post-views">531k views</span>-->
+<!--                                        <span class="video-post-date"> 2 weeks ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                            <div>-->
+<!--                                <a href="single-video.html" class="video-post video-post-list">-->
+<!--                                    &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;-->
+<!--                                    <div class="video-post-thumbnail">-->
+<!--                                        <span class="video-post-count">2.7k</span>-->
+<!--                                        <span class="video-post-time">40:00</span>-->
+<!--                                        <span class="play-btn-trigger"></span>-->
+<!--                                        <img src="assets/images/video-thumbal/1.png" alt="">-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash; Blog Post Content &ndash;&gt;-->
+<!--                                    <div class="video-post-content">-->
+<!--                                        <h3> Learn how to create PHP singleton class </h3>-->
+<!--                                        <img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+<!--                                        <span class="video-post-user">Stella Johnson</span>-->
+<!--                                        <span class="video-post-views">938k views</span>-->
+<!--                                        <span class="video-post-date"> 3 weeks ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                            <div>-->
+<!--                                <a href="single-video.html" class="video-post video-post-list">-->
+<!--                                    &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;-->
+<!--                                    <div class="video-post-thumbnail">-->
+<!--                                        <span class="video-post-count">2.3M</span>-->
+<!--                                        <span class="video-post-time">14:00</span>-->
+<!--                                        <span class="play-btn-trigger"></span>-->
+<!--                                        <img src="assets/images/video-thumbal/3.png" alt="">-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash; Blog Post Content &ndash;&gt;-->
+<!--                                    <div class="video-post-content">-->
+<!--                                        <h3> Learn Creating Laravel Package Initializing ... </h3>-->
+<!--                                        <img src="assets/images/avatars/avatar-5.jpg" alt="">-->
+<!--                                        <span class="video-post-user">Alex Dolgove</span>-->
+<!--                                        <span class="video-post-views">531k views</span>-->
+<!--                                        <span class="video-post-date"> 2 weeks ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                            <div>-->
+<!--                                <a href="single-video.html" class="video-post video-post-list">-->
+<!--                                    &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;-->
+<!--                                    <div class="video-post-thumbnail">-->
+<!--                                        <span class="video-post-count">1.4M</span>-->
+<!--                                        <span class="video-post-time">23:00</span>-->
+<!--                                        <span class="play-btn-trigger"></span>-->
+<!--                                        <img src="assets/images/video-thumbal/4.png" alt="">-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash; Blog Post Content &ndash;&gt;-->
+<!--                                    <div class="video-post-content">-->
+<!--                                        <h3> Learn how to upload files using Laravel .. </h3>-->
+<!--                                        <img src="assets/images/avatars/avatar-4.jpg" alt="">-->
+<!--                                        <span class="video-post-user">Adrian Mohani</span>-->
+<!--                                        <span class="video-post-views">531k views</span>-->
+<!--                                        <span class="video-post-date"> 2 weeks ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                            <div>-->
+<!--                                <a href="single-video.html" class="video-post video-post-list">-->
+<!--                                    &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;-->
+<!--                                    <div class="video-post-thumbnail">-->
+<!--                                        <span class="video-post-count">1.4M</span>-->
+<!--                                        <span class="video-post-time">23:00</span>-->
+<!--                                        <span class="play-btn-trigger"></span>-->
+<!--                                        <img src="assets/images/video-thumbal/2.png" alt="">-->
+<!--                                    </div>-->
+
+<!--                                    &lt;!&ndash; Blog Post Content &ndash;&gt;-->
+<!--                                    <div class="video-post-content">-->
+<!--                                        <h3> How to create a basic Sticky HTML element ..</h3>-->
+<!--                                        <img src="assets/images/avatars/avatar-3.jpg" alt="">-->
+<!--                                        <span class="video-post-user">Jonathan Madano</span>-->
+<!--                                        <span class="video-post-views">531k views</span>-->
+<!--                                        <span class="video-post-date"> 2 weeks ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                            <div>-->
+<!--                                <a href="single-video.html" class="video-post video-post-list">-->
+<!--                                    &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;-->
+<!--                                    <div class="video-post-thumbnail">-->
+<!--                                        <span class="video-post-count">2.7k</span>-->
+<!--                                        <span class="video-post-time">40:00</span>-->
+<!--                                        <span class="play-btn-trigger"></span>-->
+<!--                                        <img src="assets/images/video-thumbal/1.png" alt="">-->
+<!--                                    </div>-->
+<!--                                    &lt;!&ndash; Blog Post Content &ndash;&gt;-->
+<!--                                    <div class="video-post-content">-->
+<!--                                        <h3> Learn how to create PHP singleton class </h3>-->
+<!--                                        <img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+<!--                                        <span class="video-post-user">Stella Johnson</span>-->
+<!--                                        <span class="video-post-views">938k views</span>-->
+<!--                                        <span class="video-post-date"> 3 weeks ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+
+
+<!--                &lt;!&ndash; browse apps  &ndash;&gt;-->
+<!--                <a href="#" class="opts_icon uk-visible@s"> <i class="uil-apps"></i> </a>-->
+
+<!--                &lt;!&ndash; browse apps dropdown &ndash;&gt;-->
+<!--                <div uk-dropdown="pos: top;mode:click ; animation: uk-animation-scale-up" class="icon-browse">-->
+
+<!--                    <a href="#" class="icon-menu-item"> <i class="uil-shop"></i> Dashboard </a>-->
+<!--                    <a href="#" class="icon-menu-item"> <i class="uil-envelope-alt"></i> Messages </a>-->
+<!--                    <a href="#" class="icon-menu-item"> <i class="uil-bookmark"></i> Bookmark </a>-->
+<!--                    <a href="#" class="icon-menu-item"> <i class="uil-shopping-basket"></i> Cart </a>-->
+<!--                    <a href="#" class="icon-menu-item"> <i class="uil-shield-check"></i> Privacy </a>-->
+<!--                    <a href="#" class="icon-menu-item"> <i class="uil-bolt-alt"></i> Upgrade </a>-->
+<!--                    <a href="#" class="more-app"> More Features</a>-->
+<!--                </div>-->
+
+
+<!--                &lt;!&ndash; Message  notificiation dropdown &ndash;&gt;-->
+<!--                <a th:href="@{/chatroom}" class="opts_icon"> <i class="uil-envelope-alt"></i> <span>4</span> </a>-->
+
+<!--                &lt;!&ndash; Message  notificiation dropdown &ndash;&gt;-->
+<!--                <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"-->
+<!--                     class="dropdown-notifications">-->
+
+<!--                    &lt;!&ndash; notivication header &ndash;&gt;-->
+<!--                    <div class="dropdown-notifications-headline">-->
+<!--                        <h4>Messages</h4>-->
+<!--                        <a href="#">-->
+<!--                            <i class="icon-feather-settings" uk-tooltip="title: Message settings ; pos: left"></i>-->
+<!--                        </a>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; notification contents &ndash;&gt;-->
+<!--                    <div class="dropdown-notifications-content" data-simplebar>-->
+
+<!--                        &lt;!&ndash; notiviation list &ndash;&gt;-->
+<!--                        <ul>-->
+<!--                            <li class="notifications-not-read">-->
+<!--                                <a href="#">-->
+<!--                                        <span class="notification-avatar">-->
+<!--                                            <img src="assets/images/avatars/avatar-2.jpg" alt="">-->
+<!--                                        </span>-->
+<!--                                    <div class="notification-text notification-msg-text">-->
+<!--                                        <strong>Jonathan Madano</strong>-->
+<!--                                        <p>Okay.. Thanks for The Answer I will be waiting for your...</p>-->
+<!--                                        <span class="time-ago"> 2 hours ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="#">-->
+<!--                                        <span class="notification-avatar">-->
+<!--                                            <img src="assets/images/avatars/avatar-3.jpg" alt="">-->
+<!--                                        </span>-->
+<!--                                    <div class="notification-text notification-msg-text">-->
+<!--                                        <strong>Stella Johnson</strong>-->
+<!--                                        <p> Alex will explain you how to keep your videos privatly and all that...-->
+<!--                                        </p>-->
+<!--                                        <span class="time-ago"> 7 hours ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="#">-->
+<!--                                        <span class="notification-avatar">-->
+<!--                                            <img src="assets/images/avatars/avatar-1.jpg" alt="">-->
+<!--                                        </span>-->
+<!--                                    <div class="notification-text notification-msg-text">-->
+<!--                                        <strong>Alex Dolgove</strong>-->
+<!--                                        <p> Alia just joined Messenger! Be the first to send a-->
+<!--                                            welcome message..</p>-->
+<!--                                        <span class="time-ago"> 19 hours ago </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="#">-->
+<!--                                        <span  class="notification-avatar">-->
+<!--                                           <img th:src="@{'/img/avatars/avatar-' +${student_id} + '.jpg'}" alt="">-->
+<!--                                        </span>-->
+<!--                                    <div class="notification-text notification-msg-text">-->
+<!--                                        <strong>Adrian Mohani</strong>-->
+<!--                                        <p> Okay.. Thanks for The Answer I will be waiting for your... </p>-->
+<!--                                        <span class="time-ago"> Yesterday </span>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+
+<!--                    </div>-->
+<!--                    <div class="dropdown-notifications-footer">-->
+<!--                        <a href="#"> sell all <i class="icon-line-awesome-long-arrow-right"></i> </a>-->
+<!--                    </div>-->
+
+
+<!--                </div>-->
+
+
+<!--                &lt;!&ndash; notificiation icon  &ndash;&gt;-->
+<!--                <a href="#" class="opts_icon"> <i class="uil-bell"></i> <span>3</span> </a>-->
+
+<!--                &lt;!&ndash; notificiation dropdown &ndash;&gt;-->
+<!--                <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"-->
+<!--                     class="dropdown-notifications">-->
+
+<!--                    &lt;!&ndash; notivication header &ndash;&gt;-->
+<!--                    <div class="dropdown-notifications-headline">-->
+<!--                        <h4>Notifications </h4>-->
+<!--                        <a href="#">-->
+<!--                            <i class="icon-feather-settings"-->
+<!--                               uk-tooltip="title: Notifications settings ; pos: left"></i>-->
+<!--                        </a>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; notification contents &ndash;&gt;-->
+<!--                    <div class="dropdown-notifications-content" data-simplebar>-->
+
+<!--                        &lt;!&ndash; notiviation list &ndash;&gt;-->
+<!--                        <ul>-->
+<!--                            <li class="notifications-not-read">-->
+<!--                                <a href="#">-->
+<!--                                        <span class="notification-icon">-->
+<!--                                            <i class="icon-feather-thumbs-up"></i></span>-->
+<!--                                    <span class="notification-text">-->
+<!--                                            <strong>Adrian Mohani</strong> Like Your Comment On Video-->
+<!--                                            <span class="text-primary">Learn Prototype Faster</span>-->
+<!--                                            <br> <span class="time-ago"> 9 hours ago </span>-->
+<!--                                        </span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="#">-->
+<!--                                        <span class="notification-icon">-->
+<!--                                            <i class="icon-feather-star"></i></span>-->
+<!--                                    <span class="notification-text">-->
+<!--                                            <strong>Alex Dolgove</strong> Added New Review In Video-->
+<!--                                            <span class="text-primary">Full Stack PHP Developer</span>-->
+<!--                                            <br> <span class="time-ago"> 19 hours ago </span>-->
+<!--                                        </span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="#">-->
+<!--                                        <span class="notification-icon">-->
+<!--                                            <i class="icon-feather-message-circle"></i></span>-->
+<!--                                    <span class="notification-text">-->
+<!--                                            <strong>Stella Johnson</strong> Replay Your Comments in-->
+<!--                                            <span class="text-primary">Adobe XD Tutorial</span>-->
+<!--                                            <br> <span class="time-ago"> 12 hours ago </span>-->
+<!--                                        </span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="#">-->
+<!--                                        <span class="notification-icon">-->
+<!--                                            <i class="icon-feather-share-2"></i></span>-->
+<!--                                    <span class="notification-text">-->
+<!--                                            <strong>Adrian Mohani</strong> Like Your Comment On Video-->
+<!--                                            <span class="text-primary">Learn Prototype Faster</span>-->
+<!--                                            <br> <span class="time-ago"> Yesterday </span>-->
+<!--                                        </span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+
+<!--                    </div>-->
+
+
+<!--                </div>-->
+<!--                &lt;!&ndash; profile -image &ndash;&gt;-->
+<!--                <a class="opts_account"> <img th:src="@{'/img/avatars/avatar-' +${student_id} + '.jpg'}" alt=""></a>-->
+
+<!--                &lt;!&ndash; profile dropdown&ndash;&gt;-->
+<!--                <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"-->
+<!--                     class="dropdown-notifications small">-->
+
+<!--                    &lt;!&ndash; User Name / Avatar &ndash;&gt;-->
+<!--                    <a href="#">-->
+
+<!--                        <div class="dropdown-user-details">-->
+<!--                            <div class="dropdown-user-avatar">-->
+<!--                                <img src="assets/images/avatars/avatar-1.jpg" alt="">-->
+<!--                            </div>-->
+<!--                            <div class="dropdown-user-name">-->
+<!--                                Richard Ali <span> verified <i class="uil-check"></i> </span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </a>-->
+
+<!--                    &lt;!&ndash; User menu &ndash;&gt;-->
+
+<!--                    <ul class="dropdown-user-menu">-->
+<!--                        <li><a href="#"> <i class="uil-bolt"></i> Go PRO</a> </li>-->
+<!--                        <li><a href="#"> <i class="uil-user"></i> My Channal </a> </li>-->
+<!--                        <li><a href="#"> <i class="uil-thumbs-up"></i> Liked Videos </a></li>-->
+<!--                        <li><a href="#"> <i class="uil-history"></i> Watch Later </a></li>-->
+<!--                        <li><a href="#"> <i class="uil-cog"></i> Account Settings</a></li>-->
+<!--                        <li><a href="#" style="color:#ff8400"> <i class="uil-bolt"></i> Upgrade To Premium</a> </li>-->
+<!--                        <li>-->
+<!--                            <a href="#" id="night-mode" class="btn-night-mode">-->
+<!--                                <i class="icon-feather-moon"></i> Night mode-->
+<!--                                <span class="btn-night-mode-switch">-->
+<!--                                        <span class="uk-switch-button"></span>-->
+<!--                                    </span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <div class="menu-divider">-->
+<!--                            <li><a href="#"> <i class="icon-feather-help-circle"></i> Help</a>-->
+<!--                            </li>-->
+<!--                            <li><a href="#"> <i class="icon-feather-log-out"></i> Sing Out</a>-->
+<!--                            </li>-->
+<!--                    </ul>-->
+
+
+<!--                </div>-->
+
+<!--            </div>-->
+
+        </header>
+
+    </div>
+
+    <div class="main_content">
+
+        <div class="left-content">
+
+            <!--four-grids here-->
+            <div class="four-grids">
+                <div class="col-md-3 four-grid">
+                    <div class="four-agileits">
+                        <div class="icon">
+                            <i class="icon-material-outline-add" aria-hidden="true" style="font-size:30px;color:white;"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>学习累计时长</h3>
+                            <h4> 1067小时  </h4>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3 four-grid">
+                    <div class="four-agileinfo">
+                        <div class="icon">
+                            <i  class="icon-feather-check-circle" style="font-size:30px;color:white;" aria-hidden="true"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>完成课程</h3>
+                            <h4>47个课程</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 four-grid">
+                    <div class="four-w3ls">
+                        <div class="icon">
+                            <i class="icon-feather-users" style="font-size:30px;color:white;" aria-hidden="true"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>互动次数</h3>
+                            <h4>89次</h4>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3 four-grid">
+                    <div class="four-wthree">
+                        <div class="icon">
+                            <i class="icon-feather-alert-triangle" aria-hidden="true" style="font-size:30px;color:white;"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>学习预警</h3>
+                            <h4>0次</h4>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <!--//four-grids here-->
+            <!--agileinfo-grap-->
+            <div class="agileinfo-grap">
+                <div class="agileits-box">
+                    <header class="agileits-box-header clearfix">
+                        <h3>学习数据</h3>
+                        <div class="toolbar" style="float: right;">
+                            <div class="pull-left">
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-default btn-xs">日</a>
+                                    <a href="#" class="btn btn-default btn-xs active">月</a>
+                                    <a href="#" class="btn btn-default btn-xs">年</a>
+                                </div>
+                            </div>
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <a aria-expanded="false" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        导出 <i class="fa fa-angle-down"></i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="#">下载为PDF文件</a></li>
+                                        <li><a href="#">下载为CSV文件</a></li>
+                                        <li><a href="#">下载为PNG图片</a></li>
+                                        <li class="divider"></li>
+                                    </ul>
+                                </div>
+                                <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-cog"></i></a>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="agileits-box-body clearfix">
+                        <div id="hero-area"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 wthree-crd">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="widget widget-report-table">
+                            <header class="widget-header m-b-15">
+                            </header>
+
+                            <div class="row m-0 md-bg-grey-100 p-l-20 p-r-20">
+                                <div class="col-md-6 col-sm-6 col-xs-6 w3layouts-aug">
+                                    <h3>课程学习情况</h3>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6 ">
+                                    <h2 class="text-right c-teal f-300 m-t-20">78小时</h2>
+                                </div>
+                            </div>
+
+                            <div class="widget-body p-15">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>课程名称</th>
+                                        <th>授课教师</th>
+                                        <th>学习时长</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <!--这里时是课程的ID-->
+                                        <td>1</td>
+                                        <td>可视化导论</td>
+                                        <td>28小时</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>电路分析基础</td>
+                                        <td>20小时</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>3</td>
+                                        <td>《孟子》精读</td>
+                                        <td>15小时</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>普通物理</td>
+                                        <td>10小时</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>普通天文学</td>
+                                        <td>5小时</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 w3-agileits-crd">
+
+                <div class="card card-contact-list">
+                    <div class="agileinfo-cdr">
+                        <div class="card-header">
+                            <h3>学习排行榜</h3>
+                        </div>
+                        <div class="card-body p-b-20">
+                            <div class="list-group">
+                                <a class="list-group-item media" href="">
+                                    <div class="pull-left">
+                                        <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">1</div>
+                                    </div>
+                                    <div class="pull-left">
+                                        <img class="lg-item-img" th:src="@{/img/avatars/avatar-1102170113.jpg}" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading">鸭鸭</div>
+                                            <small class="lg-item-text">213小时</small>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="list-group-item media" href="">
+                                    <div class="pull-left">
+                                        <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">2</div>
+                                    </div>
+                                    <div class="pull-left">
+                                        <img class="lg-item-img" th:src="@{/img/avatars/avatar-1102170114.jpg}" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading">清风</div>
+                                            <small class="lg-item-text">187小时</small>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="list-group-item media" href="">
+                                    <div class="pull-left">
+                                        <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">3</div>
+                                    </div>
+                                    <div class="pull-left">
+                                        <img class="lg-item-img" th:src="@{/img/avatars/avatar-1102170112.jpg}" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading">Freya</div>
+                                            <small class="lg-item-text">156小时</small>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a class="list-group-item media" href="">
+                                    <div class="pull-left">
+                                        <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">35</div>
+                                    </div>
+                                    <div class="pull-left">
+                                        <img class="lg-item-img" th:src="@{/img/avatars/avatar-1102170115.jpg}" alt="">
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading">资资</div>
+                                            <small class="lg-item-text">78小时</small>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div class="lg-item-heading">本人</div>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 w3-agile-crd">
+                <div class="card">
+                    <div class="card-body card-padding">
+                        <div class="widget">
+                            <header class="widget-header">
+                                <h4 class="widget-title">学习记录</h4>
+                            </header>
+                            <hr class="widget-separator">
+                            <div class="widget-body">
+                                <div class="streamline">
+                                    <div class="sl-item sl-primary">
+                                        <div class="sl-content">
+                                            <small class="text-muted">5分钟前</small>
+                                            <p>观看了3分钟《可视化导论》</p>
+                                        </div>
+                                    </div>
+                                    <div class="sl-item sl-danger">
+                                        <div class="sl-content">
+                                            <small class="text-muted">25分钟前</small>
+                                            <p>观看了20分钟《孟子》精读</p>
+                                        </div>
+                                    </div>
+                                    <div class="sl-item sl-success">
+                                        <div class="sl-content">
+                                            <small class="text-muted">3小时前</small>
+                                            <p>下载了《可视化导论》1.2节资料</p>
+                                        </div>
+                                    </div>
+                                    <div class="sl-item">
+                                        <div class="sl-content">
+                                            <small class="text-muted">7小时前</small>
+                                            <p>参与了课程《宇宙简史》</p>
+                                        </div>
+                                    </div>
+                                    <div class="sl-item sl-warning">
+                                        <div class="sl-content">
+                                            <small class="text-muted">1天前</small>
+                                            <p>观看了98分钟《可视化导论》</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+            <!--//photoday-section-->
+            <!--w3-agileits-pane-->
+            <div class="w3-agileits-pane">
+                <div class="col-md-4 wthree-pan">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"> <i class="icon-material-baseline-notifications-none" style="font-size:22px;color:white;"></i> 通知面板 </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item"> <i class="icon-line-awesome-comments-o" style="font-size:22px;color:white;"></i> 新评论 <span class="pull-right text-muted small"><em style="color: white;">4分钟前</em> </span> </a>
+                                <a href="#" class="list-group-item"> <i class="icon-material-outline-access-alarm" style="font-size:22px;color:white;"></i> 课程学习提醒 <span class="pull-right text-muted small"><em style="color: white;">43分钟前</em> </span> </a>
+                                <a href="#" class="list-group-item"> <i class="icon-material-outline-access-alarm" style="font-size:22px;color:white;"></i> 待提交作业提醒 <span class="pull-right text-muted small"><em style="color: white;">上午11：32</em> </span> </a>
+                                <a href="#" class="list-group-item"> <i class="icon-line-awesome-pencil" style="font-size:22px;color:white;"></i> 待修改作业 <span class="pull-right text-muted small"><em style="color: white;">上午11：13</em> </span> </a>
+                            </div>
+                            <!-- /.list-group -->
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+                <div class="col-md-8 agile-info-stat">
+                    <div class="stats-info stats-last widget-shadow">
+                        <table class="table stats-table ">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>学习指标</th>
+                                <th>状态</th>
+                                <th>值</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>专注度</td>
+                                <td><span class="label label-success">进步</span></td>
+                                <td><h5>25% <i class="icon-feather-arrow-up-right" style="font-size: 16px"></i></h5></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>作业提交</td>
+                                <td><span class="label label-warning">正常</span></td>
+                                <td><h5>35% <i class="icon-feather-arrow-right" style="font-size: 16px"></i></h5></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>课程进度</td>
+                                <td><span class="label label-danger">延后</span></td>
+                                <td><h5 class="down">40% <i class="icon-feather-arrow-down-right" style="font-size: 16px"></i></h5></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>课堂互动</td>
+                                <td><span class="label label-info">达标</span></td>
+                                <td><h5>100% <i class="icon-feather-arrow-up-right" style="font-size: 16px"></i></h5></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="inner-block">
+
+            </div>
+
+        </div>
+
+    </div>
+<!--    &lt;!&ndash; contents &ndash;&gt;-->
+<!--    <div class="main_content">-->
+<!--        <div class="main_content_inner">-->
+
+<!--            -->
+
+
+
+<!--            &lt;!&ndash; footer-->
+<!--           ================================================== &ndash;&gt;-->
+<!--&lt;!&ndash;            <div th:replace="~{commons/commons::footer}"></div>&ndash;&gt;-->
+
+
+<!--        </div>-->
+<!--    </div>-->
+
+
+</div>
+
+
+
+
+<!-- javaScripts
+================================================== -->
+<script th:src="@{/js/framework.js}"></script>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/simplebar.js}"></script>
+<script th:src="@{/js/main.js}"></script>
+<script th:src="@{/js/studentData-raphael-min.js}"></script>
+<script th:src="@{/js/studentData-morris.js}"></script>
+<script>
+    $(document).ready(function() {
+        //BOX BUTTON SHOW AND CLOSE
+        jQuery('.small-graph-box').hover(function() {
+            jQuery(this).find('.box-button').fadeIn('fast');
+        }, function() {
+            jQuery(this).find('.box-button').fadeOut('fast');
+        });
+        jQuery('.small-graph-box .box-close').click(function() {
+            jQuery(this).closest('.small-graph-box').fadeOut(200);
+            return false;
+        });
+
+        //CHARTS
+        function gd(year, day, month) {
+            return new Date(year, month - 1, day).getTime();
+        }
+
+        graphArea2 = Morris.Area({
+            element: 'hero-area',
+            padding: 10,
+            behaveLikeLine: true,
+            gridEnabled: false,
+            gridLineColor: '#dddddd',
+            axes: true,
+            resize: true,
+            smooth:true,
+            pointSize: 0,
+            lineWidth: 0,
+            fillOpacity:0.85,
+            data: [
+                // {period: '1月', '学习时长': 9.7,  '课程数目': 3, '最长专注时长': 3.5},
+                // {period: '2月', '学习时长': 12.3, '课程数目': 6, '最长专注时长': 2.5},
+                // {period: '3月', '学习时长': 2.3,  '课程数目': 5, '最长专注时长': 4.5},
+                // {period: '4月', '学习时长': 8.7,  '课程数目': 3, '最长专注时长': 2},
+                // {period: '5月', '学习时长': 8.3,  '课程数目': 2, '最长专注时长': 3.5},
+                // {period: '6月', '学习时长': 2.35, '课程数目': 4, '最长专注时长': 4},
+                // {period: '7月', '学习时长': 1.23, '课程数目': 7, '最长专注时长': 2.5}
+
+            {period: '1月', '学习时长': 56, '课程数目': 3,'最长专注时长': 3},
+            {period: '2月', '学习时长': 45,'课程数目': 6,'最长专注时长': 2.5},
+            {period: '3月', '学习时长': 72,'课程数目': 5,'最长专注时长': 4},
+            {period: '4月', '学习时长': 87, '课程数目': 3,'最长专注时长': 2},
+            {period: '5月', '学习时长': 90,'课程数目': 2,'最长专注时长': 3.5},
+            {period: '6月', '学习时长': 96, '课程数目': 4,'最长专注时长': 4.5},
+            {period: '7月', '学习时长': 48, '课程数目': 7,'最长专注时长': 2},
+            ],
+            lineColors:['#ff4a43','#a2d200','#22beef'],
+            xkey: 'period',
+            redraw: true,
+            ykeys: ['学习时长', '课程数目', '最长专注时长'],
+            labels: ['学习时长', '课程数目', '最长专注时长'],
+            pointSize: 2,
+            hideHover: 'auto',
+            resize: true
+        });
+
+
+    });
+</script>
+</body>
+
+</html>

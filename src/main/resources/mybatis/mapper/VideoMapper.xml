@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freya.onlinetech.mapper.VideoMapper">
+
+    <select id="getFollowVideo" resultMap="Video">
+        SELECT * FROM video_info,teacher_info,follow_list
+        WHERE follow_list.teacher_id = video_info.video_teacher_id AND  video_info.video_teacher_id = teacher_info.teacher_id
+          and follow_list.student_id=#{student_id} ORDER BY video_info.video_good_num DESC LIMIT 8;
+    </select>
+
+    <select id="getTeacherVideo" resultMap="Video">
+        SELECT * FROM video_info,teacher_info WHERE video_info.video_teacher_id = teacher_info.teacher_id AND teacher_id = #{teacher_id} ORDER BY video_info.video_good_num DESC
+    </select>
+
+    <select id="getVideoById" resultMap="Video">
+        SELECT * FROM video_info,teacher_info WHERE video_info.video_teacher_id = teacher_info.teacher_id
+                                                AND video_id = #{video_id};
+    </select>
+
+    <select id="getLatestTeacherVideo" resultMap="Video">
+        SELECT * FROM video_info,teacher_info WHERE video_info.video_teacher_id = teacher_info.teacher_id
+                                                AND teacher_id = #{teacher_id} ORDER BY video_add_time DESC LIMIT 6;
+    </select>
+
+    <select id="getTeacherVideoNum" resultType="_int">
+        SELECT COUNT(*) FROM video_info WHERE video_teacher_id = #{teacher_id};
+    </select>
+
+    <select id="queryLatestCourseVideo" resultType="VideoInfo">
+        SELECT * from video_info WHERE video_course_id = #{course_id} AND video_info.video_chapter_id=1 AND video_info.video_section_id=1;
+    </select>
+
+    <resultMap id="Video" type="VideoInfo">
+        <result property="video_id" column="video_id"></result>
+        <result property="video_course_id" column="video_course_id"></result>
+        <result property="video_chapter_id" column="video_chapter_id"></result>
+        <result property="video_section_id" column="video_section_id"></result>
+        <result property="video_add_time" column="video_add_time" jdbcType="DATE"></result>
+        <result property="video_times" column="video_times"></result>
+        <result property="video_view_num" column="video_view_num"></result>
+        <result property="video_image" column="video_image"></result>
+        <result property="video_teacher_id" column="video_teacher_id"></result>
+        <result property="video_name" column="video_name"></result>
+        <result property="teacher_name" column="teacher_name"></result>
+        <result property="video_good_num" column="video_good_num"></result>
+        <result property="video_bad_num" column="video_bad_num"></result>
+    </resultMap>
+
+
+</mapper>

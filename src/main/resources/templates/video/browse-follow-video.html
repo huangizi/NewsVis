@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="assets/images/favicon.png">
+
+    <!-- CSS
+        ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <script th:src="@{/js/numberDeal.js}"></script>
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- sidebar -->
+        <div th:replace="~{commons/commons::sidebar-menu(active='browse-follow-video.html')}"></div>
+        <!--header-->
+        <div th:replace="~{commons/commons::main_header}"></div>
+
+        <!-- contents -->
+        <div class="main_content">
+            <div class="main_content_inner">
+
+                <h3> 未看的视频 </h3>
+
+                <div class="sections-small" id="div-video-info">
+                    <ul class="uk-child-width-1-4@m uk-child-width-1-2@s" uk-grid >
+                        <li th:each="videoFollow:${videoFollows}">
+                            <a class="video-post" th:href="@{/video/detail(course_id=${videoFollow.getVideo_course_id()},video_id=${videoFollow.getVideo_id()},student_id=${student_id})}">
+                                <!-- Blog Post Thumbnail -->
+                                <div class="video-post-thumbnail">
+                                    <span class="video-post-count" id="span-watch-num"></span>
+                                    <span class="video-post-time" th:text="${videoFollow.getVideo_times()}+'分钟'"></span>
+                                    <span class="play-btn-trigger"></span>
+                                    <!-- option menu -->
+                                    <span class="btn-option">
+                                        <i class="icon-feather-more-vertical"></i>
+                                    </span>
+                                    <div class="dropdown-option-nav"
+                                         uk-dropdown="pos: bottom-right ;mode : hover ;animation: uk-animation-slide-bottom-small">
+                                        <ul>
+                                            <li>
+                                                <span> <i class="uil-history"></i>稍后再看</span>
+                                            </li>
+                                            <li>
+                                                <span> <i class="uil-bookmark"></i>添加书签</span>
+                                            </li>
+                                            <li>
+                                                <span> <i class="uil-share-alt"></i>分享</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <img th:src="'/img/course/course_'+${videoFollow.getVideo_course_id()}+'.jpg'" alt="">
+
+                                </div>
+
+                                <!-- Blog Post Content -->
+                                <div class="video-post-content">
+                                    <h3 th:text="${videoFollow.getVideo_name()}"></h3>
+                                    <img th:src="'/img/avatars/avatar-'+${videoFollow.getVideo_teacher_id()}+'.jpg'" alt="">
+                                    <p>
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+
+                <!-- footer
+               ================================================== -->
+                <div th:replace="~{commons/commons::footer}"></div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <!-- For Night mode -->
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+
+    <!-- javaScripts
+    ================================================== -->
+    <script th:src="@{/js/framework.js}"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/simplebar.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:inline="javascript">
+        function getUnitNumber(value)
+        {
+            let newValue = ['', '', ''];
+            let fr = 1000;
+            const ad = 1;
+            let num = 3;
+            const fm = 1;
+            while (value / fr >= 1) {
+                fr *= 10;
+                num += 1;
+                //console.log('数字', value / fr, 'num:', num);
+            }
+            if (num <= 4) { // 千
+                newValue[1] = '千';
+                newValue[0] = parseInt((value / 1000).toFixed(1)) + '';
+                console.log(newValue[0]);
+            } else if (num <= 8) { // 万
+                const text1 = parseInt(num - 4) / 3 > 1 ? '千万' : '万';
+                // tslint:disable-next-line:no-shadowed-variable
+                const fm = '万' === text1 ? 10000 : 10000000;
+                newValue[1] = text1;
+                newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+                console.log(newValue[0]);
+            } else if (num <= 16) {// 亿
+                let text1 = (num - 8) / 3 > 1 ? '千亿' : '亿';
+                text1 = (num - 8) / 4 > 1 ? '万亿' : text1;
+                text1 = (num - 8) / 7 > 1 ? '千万亿' : text1;
+                // tslint:disable-next-line:no-shadowed-variable
+                let fm = 1;
+                if ('亿' === text1) {
+                    fm = 100000000;
+                } else if ('千亿' === text1) {
+                    fm = 100000000000;
+                } else if ('万亿' === text1) {
+                    fm = 1000000000000;
+                } else if ('千万亿' === text1) {
+                    fm = 1000000000000000;
+                }
+                newValue[1] = text1;
+                newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+            }
+            if (value < 1000) {
+                newValue[1] = '';
+                newValue[0] = value + '';
+            }
+            return newValue.join('');
+        }
+        // $("body").delegate("#div-video-info","load",function (){
+        //     setViewNum();
+        // })
+
+        // function setViewNum(){
+        //
+        // }
+        var videoFollows = [[${videoFollows}]];
+        //console.log(allFollowedTeachers);
+        var p_li = document.getElementById("div-video-info").getElementsByTagName('p');
+        var span_video_num = document.getElementById("div-video-info").getElementsByClassName('video-post-count');
+        //
+        for(var i=0;i<p_li.length;i++) {
+            var videoFollow = videoFollows[i];
+            //显示有多少次观看和发布时间
+            var video_view_num = videoFollow.video_view_num;
+            var fan_video_text = getUnitNumber(video_view_num) + ' 观看 ';
+            var text_video_num = getUnitNumber(video_view_num)
+            //设置时间
+            var text_time = videoFollow.video_add_time;
+            var format_time = new Date(text_time);
+            let y=format_time.getFullYear().toString();
+            let m=(format_time.getMonth()+1).toString();
+            let d=format_time.getDate().toString();
+            format_time = y+"年"+m+"月"+d+"日"
+            p_li[i].innerHTML=
+                "<span class='video-post-user'> " + videoFollow.teacher_name + "</span>" +
+                "<span class='video-post-views'>" + fan_video_text + "</span>" +
+                "<span class='video-post-date'>"+format_time+" </span>"
+            span_video_num[i].textContent = text_video_num
+        }
+        //设置观看的次数，视频上的那个橘红色的标签
+        //th:text="${videoFollow.getVideo_view_num()}
+        // var div_watchs = document.getElementById("span-watch-num");
+        // console.log(div_watchs);
+        // for(var i=0;i<div_watchs.length;i++) {
+        //     var videoFollow = videoFollows[i];
+
+        //     console.log(div_watchs[i]);
+        //     div_watchs[i].textContent = fan_video_text;
+        // }
+    </script>
+
+</body>
+
+</html>

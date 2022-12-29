@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="assets/images/favicon.png">
+
+
+    <!-- CSS
+        ================================================== -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <script th:src="@{/js/numberDeal.js}"></script>
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!--side-bar-menu-->
+        <div th:replace="~{commons/commons::sidebar-menu}"></div>
+        <!--header-->
+        <div th:replace="~{commons/commons::main_header}"></div>
+
+        <!-- contents -->
+        <div class="main_content">
+
+            <div class="channal">
+                <div class="channal-cover">
+
+                    <!-- channal cover -->
+                    <img th:src="@{'/img/course/course_'+${courseVideo.getCourse_id()}+'.jpg'}" alt="">
+
+                </div>
+
+                <div class="main_content_inner">
+                    <div class="channal-details">
+                        <div class="left-side">
+                            <div class="channal-image">
+                                <a href="#">
+                                    <img th:src="@{'/img/avatars/avatar-'+${teacherInfo.getTeacher_id()}+'.jpg'}" alt="">
+                                </a>
+                            </div>
+
+                            <div class="channal-details-info">
+                                <h3 th:text="${teacherInfo.getTeacher_name()}"> </h3>
+<!--                                <p th:text="${teacherInfo.getTeacher_follow_num()}+' 关注'"></p>-->
+                                <p id="teacher_info_follow_num"></p>
+                            </div>
+                        </div>
+                        <div class="right-side">
+<!--                            <div class="btn-subscribe">-->
+<!--                                <a href="#" class="button soft-warning"> <i class="icon-feather-plus"></i> 关注-->
+<!--                                </a>-->
+<!--                                <span class="subs-amount" id="span_teacher_follow"></span>-->
+<!--                            </div>-->
+
+                            <div class="btn-subscribe" id="div-teacher-follow">
+                                <button id="btn-teacher-follow" href="#" th:class="${teacherIsFollow==true?'button disabled':'button danger'}">
+                                    <i class="icon-feather-plus" th:if="${teacherIsFollow} eq false"></i>
+                                    <i class="icon-material-outline-check" th:if="${teacherIsFollow} eq true"></i>
+                                    [[${teacherIsFollow}==true?'已经关注':'关注']]
+                                </button>
+                                <span class="subs-amount" id="span_show_fan_num" ></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-channal" k-sticky="offset:61;media : @s">
+                        <div th:replace="~{commons/course::responsive-tab(TopBarActive='1')}"></div>
+                        <form class="nav-channal-saerchbox">
+                            <i class="uil-search"></i>
+                            <input class="uk-input" type="text" value="搜索视频">
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="main_content_inner" >
+
+                <div class="panel-group" id="accordion" th:each="courseChapter:${courseVideo.getChapter()}" >
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion"
+                                   th:href="'#collapse'+${courseChapter.getCourse_chapter_id()}" th:text="${courseChapter.getCourse_chapter_name()}">
+
+                                </a>
+                            </h4>
+                        </div>
+                        <div th:id="'collapse'+${courseChapter.getCourse_chapter_id()}" class="panel-collapse collapse in">
+                            <div class="panel-body" th:each="courseSection:${courseChapter.getSection()}">
+                                <a th:text="${courseSection.getCourse_section_name()}" th:href="@{/video/detail(course_id=${courseVideo.getCourse_id()},video_id=${courseSection.getVideo_id()},student_id=${student_id})}">
+
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+                <!-- footer
+               ================================================== -->
+                <div th:replace="~{commons/commons::footer}"></div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- For Night mode -->
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+
+    <!-- javaScripts
+    ================================================== -->
+    <script th:src="@{/js/framework.js}"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/simplebar.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:inline="javascript">
+        <!--设置粉丝数-->
+        var teacher_follow_num = [[${teacherInfo.getTeacher_follow_num()}]];
+        var p_teacher_follow = document.getElementById(id="teacher_info_follow_num");
+        p_teacher_follow.textContent = getUnitNumber(teacher_follow_num);
+        //设置关注时的粉丝数
+        var span_teacher_follow = document.getElementById(id="span_teacher_follow");
+        span_teacher_follow.textContent = getUnitNumber(teacher_follow_num);
+        //设置老师的粉丝数
+        var fan_num = [[${teacherInfo.getTeacher_follow_num()}]];
+        var span_show_fan_num = document.getElementById("span_show_fan_num");
+        span_show_fan_num.textContent = getUnitNumber(fan_num);
+        //设置教师课程观看
+        //循环设置粉丝数
+        // var videoFollows = [[${videoFollows}]];
+        // //console.log(allFollowedTeachers);
+        // var p_li = document.getElementById("div-video-info").getElementsByTagName('p');
+        // var span_video_num = document.getElementById("div-video-info").getElementsByClassName('video-post-count');
+        // for(var i=0;i<p_li.length;i++) {
+        //     var videoFollow = videoFollows[i];
+        //     //显示有多少次观看和发布时间
+        //     var video_view_num = videoFollow.video_view_num;
+        //     var fan_video_text = getUnitNumber(video_view_num) + ' 观看 ';
+        //     var text_video_num = getUnitNumber(video_view_num)
+        //     p_li[i].innerHTML=
+        //         "<span class='video-post-user'> " + videoFollow.teacher_name + "</span>" +
+        //         "<span class='video-post-views'>" + fan_video_text + "</span>" +
+        //         "<span class='video-post-date'> 2 weeks ago </span>"
+        //     span_video_num[i].textContent = text_video_num
+        // }
+    </script>
+    <script th:inline="javascript">
+        // $(document).ready(function (){
+        //     $("#btn-teacher-follow").click(function (){
+        //         teacherFollowBtnOnClick();
+        //     })
+        //
+        // })
+        //设置老师的粉丝数
+        var fan_num = [[${teacherInfo.getTeacher_follow_num()}]];
+        var span_show_fan_num = document.getElementById("span_show_fan_num");
+        span_show_fan_num.textContent = getUnitNumber(fan_num);
+        $("body").delegate("#btn-teacher-follow","click",function (){
+            teacherFollowBtnOnClick();
+        })
+        function teacherFollowBtnOnClick(){
+            // var search = {}
+            // search["username"] = "zizi";
+            $.ajax({
+                type:"post", //向服务器发送的数据，服务器解析数据的方式 【静态文件用get。向服务器发送请求用post】
+                url:"/student/followTeacher",//发送路径
+                async:false,//是否异步，否。将其改成同步
+                data:{'student_id':[[${student_id}]],'teacher_id':[[${teacher_id}]]},//传递的参数【使用json格式】
+                dataType:"json",//数据格式
+                success:function(response){//成功的时候执行什么操作
+                    //如果变成了未关注
+                    if(response.followStatus == 'no' && response.error == 'no'){
+                        $("#div-teacher-follow").empty();
+                        $("#div-teacher-follow").append("<button id='btn_teacher_follow' class='button danger' onclick='teacherFollowBtnOnClick()'>"+
+                            "<i class='icon-feather-plus'></i>"+
+                            "关注"+
+                            "</button>"+
+                            "<span class='subs-amount' id='span_show_fan_num'></span>"
+                        )
+                    }else if (response.followStatus == 'yes' && response.error == 'no'){
+                        //状态是已经关注
+                        $("#div-teacher-follow").empty();
+                        $("#div-teacher-follow").append("<button id='btn_teacher_follow' class='button disabled' onclick='teacherFollowBtnOnClick()'>"+
+                            "<i class='icon-material-outline-check'></i>"+
+                            "已经关注"+
+                            "</button>"+
+                            "<span class='subs-amount' id='span_show_fan_num'></span>"
+                        )
+                    }else if(response.error == 'yes'){
+                        if(response.followStatus == 'no'){
+                            alert("添加关注失败，请稍后再试!");
+                        }else if(response.followStatus == 'yes'){
+                            alert("取消关注失败，请稍后再试!");
+                        }
+                    }
+                    //设置老师的粉丝数
+                    var fan_num = [[${teacherInfo.getTeacher_follow_num()}]];
+                    var span_show_fan_num = document.getElementById("span_show_fan_num");
+                    span_show_fan_num.textContent = getUnitNumber(fan_num);
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

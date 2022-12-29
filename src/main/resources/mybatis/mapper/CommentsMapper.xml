@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freya.onlinetech.mapper.CommentsMapper">
+    <select id="getCommentsRoot" resultMap="Comments">
+        SELECT * FROM comments_root LEFT JOIN comments_reply ON comments_root.comment_id = comments_reply.reply_comment_id
+        WHERE comments_root.course_id = #{course_id};
+    </select>
+
+    <resultMap id="Comments" type="CommentsRoot">
+        <result property="comment_id" column="comment_id"></result>
+        <result property="type" column="type"></result>
+        <result property="owner_id" column="owner_id"></result>
+        <result property="from_id" column="from_id"></result>
+        <result property="content" column="content"></result>
+        <result property="create_time" column="create_time"></result>
+        <result property="from_identity" column="from_identity"></result>
+        <result property="owner_identity" column="owner_identity"></result>
+        <result property="owner_name" column="owner_name"></result>
+        <result property="from_name" column="from_name"></result>
+        <result property="owner_avatar" column="owner_avatar"></result>
+        <result property="from_avatar" column="from_avatar"></result>
+        <collection property="commentsReplyList" ofType="CommentsReply">
+            <result property="reply_id" column="reply_id"></result>
+            <result property="comment_id" column="reply_dcomment_id"></result>
+            <result property="from_id" column="reply_from_id"></result>
+            <result property="to_id" column="reply_to_id"></result>
+            <result property="from_identity" column="reply_from_identity"></result>
+            <result property="to_identity" column="reply_to_identity"></result>
+            <result property="content" column="reply_content"></result>
+            <result property="create_time" column="reply_create_time"></result>
+            <result property="from_name" column="reply_from_name"></result>
+            <result property="to_name" column="reply_to_name"></result>
+            <result property="from_avatar" column="reply_from_avatar"></result>
+            <result property="to_avatar" column="reply_to_avatar"></result>
+        </collection>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freya.onlinetech.mapper.StudentFollowMapper">
+    <select id="getStudentFollows" resultType="TeacherInfo">
+        SELECT  teacher_info.* FROM teacher_info,follow_list
+        WHERE follow_list.teacher_id = teacher_info.teacher_id AND follow_list.student_id=#{student_id}
+            LIMIT 5;
+    </select>
+
+    <select id="getAllTeachers" resultType="TeacherInfo">
+        SELECT  * FROM teacher_info;
+    </select>
+
+    <select id="getAllFollowedTeacher" resultType="TeacherInfo">
+        SELECT  teacher_info.* FROM teacher_info,follow_list
+        WHERE follow_list.teacher_id = teacher_info.teacher_id AND follow_list.student_id=#{student_id};
+    </select>
+
+    <select id="getRecommendTeacher" resultType="TeacherInfo">
+        SELECT teacher_info.* FROM teacher_info LEFT JOIN follow_list ON teacher_info.teacher_id = follow_list.teacher_id WHERE follow_list.teacher_id IS NULL
+    </select>
+
+    <select id="getFollowedTeacherID" resultType="_int">
+        SELECT follow_list.teacher_id FROM follow_list WHERE student_id = student_id;
+    </select>
+
+    <delete id="studentFollowCancel" parameterType="_int">
+        DELETE FROM follow_list WHERE follow_list.student_id=#{student_id} AND follow_list.teacher_id=#{teacher_id};
+    </delete>
+
+    <insert id="addStudentFollow" parameterType="_int">
+        INSERT INTO follow_list(student_id,teacher_id) VALUES(#{student_id},#{teacher_id});
+    </insert>
+</mapper>

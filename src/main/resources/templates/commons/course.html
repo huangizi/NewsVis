@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav class="responsive-tab" th:fragment="responsive-tab">
+<!--    <ul>-->
+<!--        <li th:class=" ${TopBarActive=='1'}?'uk-active':'' "><a th:class=" ${TopBarActive=='1'}?'active':'' "  th:href="@{/course/detail(course_id=${courseVideo.getCourse_id()},student_id=${student_id})}">课程详情</a></li>-->
+<!--        <li><a th:href="@{/course/comments(course_id=${courseVideo.getCourse_id()},student_id=${student_id})}">课件</a></li>-->
+<!--        <li><a href="#0">测验与作业</a></li>-->
+<!--        <li th:class=" ${TopBarActive=='4'}?'uk-active':'' "><a th:class=" ${TopBarActive=='4'}?'active':'' " th:href="@{/course/comments(course_id=${courseVideo.getCourse_id()},student_id=${student_id})}">讨论区</a></li>-->
+<!--    </ul>-->
+    <ul>
+        <li th:class=" ${TopBarActive=='1'}?'uk-active':'' "><a th:class=" ${TopBarActive=='1'}?'active':'' " th:href="@{/course/detail(course_id=${courseVideo.getCourse_id()},student_id=${student_id})}">课程详情</a></li>
+        <li th:class=" ${TopBarActive=='2'}?'uk-active':'' "><a th:href="@{/course/courseware(course_id=${courseVideo.getCourse_id()},student_id=${student_id})}">课件</a></li>
+        <li><a href="#0">测验与作业</a></li>
+        <li th:class=" ${TopBarActive=='4'}?'uk-active':'' "><a th:class=" ${TopBarActive=='4'}?'active':'' " th:href="@{/course/comments(course_id=${courseVideo.getCourse_id()},student_id=${student_id})}">讨论区</a></li>
+    </ul>
+</nav>
+
+
+</body>
+</html>

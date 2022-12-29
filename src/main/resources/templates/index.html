@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="assets/images/favicon.png">
+
+    <!-- CSS 
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+
+    <!-- Content
+    ================================================== -->
+    <div uk-height-viewport class="uk-flex uk-flex-middle">
+        <div class="uk-width-2-3@m uk-width-1-2@s m-auto rounded">
+            <div class="uk-child-width-1-2@m uk-grid-collapse bg-gradient-warning" uk-grid>
+
+
+                <!-- column one -->
+                <div class="uk-margin-auto-vertical uk-text-center uk-animation-scale-up p-3 uk-light">
+                    <img th:src="@{/img/logo-light-icon.png}" width="45" alt="">
+                    <h1 class="mb-4 mt-2"> StudyNow</h1>
+                    <p>基于数据驱动的在线教育平台</p>
+                </div>
+
+                <!-- column two -->
+                <div class="uk-card-default p-6">
+                    <div class="my-4 uk-text-center">
+                        <h2 class="mb-0" th:text="#{login.welcome}"> </h2>
+                        <p class="my-2" th:text="#{login.tip}"></p>
+                    </div>
+                    <form th:action="@{user/login}">
+                        <!--如果msg的值为空，则不显示消息-->
+                        <p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+                        <div class="uk-form-group">
+                            <label class="uk-form-label" th:text="#{login.username}"></label>
+                            <div class="uk-position-relative w-100">
+                                <span class="uk-form-icon">
+                                    <i class="icon-feather-mail"></i>
+                                </span>
+                                <input name="id" class="uk-input" th:placeholder="#{login.accountTip}">
+                            </div>
+
+                        </div>
+
+                        <div class="uk-form-group">
+                            <label class="uk-form-label" th:text="#{login.password}"></label>
+
+                            <div class="uk-position-relative w-100">
+                                <span class="uk-form-icon">
+                                    <i class="icon-feather-lock"></i>
+                                </span>
+                                <input name="password" class="uk-input" type="password" th:placeholder="#{login.passwordTip}">
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-4 uk-flex-middle uk-grid-small" uk-grid>
+                            <div class="uk-width-expand@s">
+                                <p> 没有账户请先 <a th:href="@{/studentRegister}">注册</a>  忘记密码了 <a th:href="@{/studentRegister}">找回密码</a> </p>
+                            </div>
+                            <div class="uk-width-auto@s">
+                                <button type="submit" class="button warning" th:text="#{login.btn}"></button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div><!--  End column two -->
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -End
+    ================================================== -->
+
+
+    <!-- For Night mode -->
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+
+    <!-- javaScripts
+    ================================================== -->
+    <script th:src="@{/js/framework.js}"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/simplebar.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+
+
+</body>
+
+</html>
