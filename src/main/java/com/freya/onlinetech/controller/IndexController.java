@@ -1,5 +1,6 @@
 package com.freya.onlinetech.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.freya.onlinetech.pojo.*;
 import com.freya.onlinetech.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class IndexController {
@@ -23,10 +24,39 @@ public class IndexController {
     CourseService courseService;
     @Autowired
     SchoolService schoolService;
+    @Autowired
+    NewsService newsService;
+    
     @RequestMapping({"/","/index.html"})
-    public String index()
+    public String index(Model model)
     {
         //return "public";
+        List<NewsTitle> newsTitle = newsService.getNewsTitle();
+        model.addAttribute("newsTitle",newsTitle);
+        System.out.println(newsTitle);
+        //词云统计
+        Map<String,Object> WordCloudMap = new HashMap<>();
+        WordCloudMap.put("az",3);
+        WordCloudMap.put("b",6);
+        WordCloudMap.put("c",8);
+        WordCloudMap.put("d",2);
+        JSONObject json = new JSONObject(WordCloudMap);
+        System.out.println(json);
+//        List<String> WordCloud_key = new ArrayList<>();
+//        for (String key:WordCloudMap.keySet())
+//        {
+//            WordCloud_key.add('"'+key+'"');
+//        }
+//        System.out.println(WordCloud_key);
+//        WordCloud a = new WordCloud("a",4);
+//        WordCloudSet.add(a);
+        //JSONObject WordCloud = new JSONObject(WordCloudMap);
+//        Set<String> WordCloud_key = WordCloud.keySet();
+//        System.out.println(WordCloud_key);
+//        Collection<Integer> WordCloud_values = WordCloudMap.values();
+//        model.addAttribute("WordCloud_key",WordCloud_key);
+//        model.addAttribute("WordCloud_values",WordCloud_values);
+        model.addAttribute("WordCloud",json);
         return "index";
         //return "redirect:/chatroom";
     }

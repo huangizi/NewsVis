@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
+    <meta http-equiv="refresh" content="20">
     <link rel="icon" href="assets/images/favicon.png">
 
     <!-- CSS 
@@ -49,48 +50,23 @@
 </div>
 
 <div class="puleft fl">
-    <div class="pulefttop"><h2 class="tith2"><span>舆情来源分析</span></h2>
-        <div class="lefttoday_tit"><p class="fl">地区：大兴</p><p class="fr">2022-12-26</p></div>
-        <div class="box pbox">
-            <div class="lefttoday_bar pulefttoday_bar fl">
-                <ul>
-                    <li class="c1 big1" style="top: 25%;left: 16%;"><span>交通6</span></li>
-                    <li class="c2 big2" style="top: 35%;left: 65%;"><span>求助1</span></li>
-                    <li class="c3 big4" style="top: 25%;left: 35%;"><span>无效报警2</span></li>
-                    <li class="c4 big5" style="top: 65%;left: 65%;"><span>投诉2</span></li>
-                    <li class="c5 big6" style="top: 65%;left: 25%;"><span>日常纠纷1</span></li>
-                    <li class="c6 big1" style="top: 45%;left: 15%;"><span>刑案4</span></li>
-                    <li class="c1 big0" style="top: 35%;left: 75%;"></li>
-                    <li class="c2 big0" style="top: 85%;left: 55%;"></li>
-                    <li class="c3 big0" style="top: 85%;left: 15%;"></li>
-                </ul>
-            </div>
-            <div class="pvr fr pulefttoday_bar2" >
-                <ul>
-                    <li class="hot1">1</li>
-                    <li class="hot2">2</li>
-                    <li class="hot3">3</li>
-                    <li class="hot4">4</li>
-                    <li class="hot5">5</li>
-                </ul>
-                <div id="puleftbox2bott_cont" class="puleftbox2bott_cont" ></div>
-            </div>
-        </div>
-        <!-- lefttoday_number end -->
+    <div class="pulefttop"><h2 class="tith2"><span style="color: white">热门新闻词云分析</span></h2>
+        <div class="box pbox" id="puleftbox2bott_cont"></div>
     </div>
+
     <div class="puleftboxtmidd">
         <h2 class="tith2">舆情区域分析</h2>
         <div class="lefttoday_tit"><p class="fl">状态：已调节</p><p class="fr">时间段：2022-12-10 至 2022-12-28</p></div>
         <div class="box pbox">
             <div id="puleftboxtmidd1" class="fl puleftboxtmidd1"></div>
             <div class="pvr fr pulefttoday_bar2" >
-                <ul>
-                    <li class="hot1">1</li>
-                    <li class="hot2">2</li>
-                    <li class="hot3">3</li>
-                    <li class="hot4">4</li>
-                    <li class="hot5">5</li>
-                </ul>
+<!--                <ul>-->
+<!--                    <li class="hot1">1</li>-->
+<!--                    <li class="hot2">2</li>-->
+<!--                    <li class="hot3">3</li>-->
+<!--                    <li class="hot4">4</li>-->
+<!--                    <li class="hot5">5</li>-->
+<!--                </ul>-->
                 <div id="puleftboxtmidd2" class="puleftbox2bott_cont"></div>
             </div>
         </div>
@@ -153,35 +129,39 @@
             <h2 class="tith2 pt3">热门信息</h2>
             <div class="lefttoday_tit "><p class="fl">状态：已调节</p><p class="fr">时间段：2022-12-26</p></div>
             <div class="left2_table pumiddboxttop2_cont">
-                <ul>
-                    <li>
-                        <p class="text_l">村名王某因为被隔壁邻居的狗咬了，产生了纠纷，村名报警。</p>
+                <ul >
+                    <li th:each="news:${newsTitle}">
+                        <p class="text_l" th:text="${news.getTitle()}"></p>
                         <p class="text_r">新浪微博  转发：86  2022-12-21 11:08:56</p>
                     </li>
-                    <li class="bg">
-                        <p class="text_l">北京协和医院通过内部改造、扩容，现拥有两个发热门诊区。</p>
-                        <p class="text_r">新浪微博  转发：11857   2022-12-27 14:09:27</p>
-                    </li>
-                    <li>
-                        <p class="text_l">现在出现所谓的白肺与武汉当时的原始毒株和疫苗接种没有关系。</p>
-                        <p class="text_r">新浪微博  转发：21857  2022-12-27 21:24:15</p>
-                    </li>
-                    <li class="bg">
-                        <p class="text_l">心中坦荡 路是必然 吕布FMVP皮肤1.1日上线</p>
-                        <p class="text_r">新浪微博  转发：403   2022-12-25 17:48:35</p>
-                    </li>
-                    <li>
-                        <p class="text_l">你觉得生活在小县城找对象难吗？你目前的情感状况是怎样的？</p>
-                        <p class="text_r">新浪微博  转发：4127  2022-12-24 18:09:44</p>
-                    </li>
-                    <li class="bg">
-                        <p class="text_l">K60 性能宇宙正式发布，12月31日 10 点首卖，2499 元起！</p>
-                        <p class="text_r">百度贴吧  转发：2177   2022-12-18 09:22:48</p>
-                    </li>
-                    <li>
-                        <p class="text_l">村名王某因为被隔壁邻居的狗咬了，产生了纠纷，村名报警。</p>
-                        <p class="text_r">新浪微博  转发：86  2018-06-14 11:08:56</p>
-                    </li>
+<!--                    <li>-->
+<!--                        <p class="text_l">村名王某因为被隔壁邻居的狗咬了，产生了纠纷，村名报警。</p>-->
+<!--                        <p class="text_r">新浪微博  转发：86  2022-12-21 11:08:56</p>-->
+<!--                    </li>-->
+<!--                    <li class="bg">-->
+<!--                        <p class="text_l">北京协和医院通过内部改造、扩容，现拥有两个发热门诊区。</p>-->
+<!--                        <p class="text_r">新浪微博  转发：11857   2022-12-27 14:09:27</p>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <p class="text_l">现在出现所谓的白肺与武汉当时的原始毒株和疫苗接种没有关系。</p>-->
+<!--                        <p class="text_r">新浪微博  转发：21857  2022-12-27 21:24:15</p>-->
+<!--                    </li>-->
+<!--                    <li class="bg">-->
+<!--                        <p class="text_l">心中坦荡 路是必然 吕布FMVP皮肤1.1日上线</p>-->
+<!--                        <p class="text_r">新浪微博  转发：403   2022-12-25 17:48:35</p>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <p class="text_l">你觉得生活在小县城找对象难吗？你目前的情感状况是怎样的？</p>-->
+<!--                        <p class="text_r">新浪微博  转发：4127  2022-12-24 18:09:44</p>-->
+<!--                    </li>-->
+<!--                    <li class="bg">-->
+<!--                        <p class="text_l">K60 性能宇宙正式发布，12月31日 10 点首卖，2499 元起！</p>-->
+<!--                        <p class="text_r">百度贴吧  转发：2177   2022-12-18 09:22:48</p>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <p class="text_l">村名王某因为被隔壁邻居的狗咬了，产生了纠纷，村名报警。</p>-->
+<!--                        <p class="text_r">新浪微博  转发：86  2018-06-14 11:08:56</p>-->
+<!--                    </li>-->
                 </ul>
             </div>
         </div>
@@ -224,6 +204,9 @@
 <!--<script type="text/javascript" src="../static/js/echarts.min.js"></script>-->
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 <script src="https://cdn.bootcss.com/echarts/4.6.0/echarts.min.js"></script>
+<script src="https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js"></script>
+<!--<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>-->
+
 <script type="text/javascript" >
     var myChart2 = echarts.init(document.getElementById('purightboxmidd'));
     var a2 = [120, 132, 101, 134, 90, 230, 210];
@@ -768,6 +751,50 @@
         ]
     };
     myChart.setOption(option);
+</script>
+
+<!--puleftbox2bott_cont-->
+<!--新闻高频词 词云分析-->
+<script th:inline="javascript" type="text/javascript">
+    // var arr = [];
+    // WordCloud_key = [[${WordCloud_key}]]
+    // WordCloud_values = [[${WordCloud_values}]]
+    // for (var i=0;i<WordCloud_key.length;i++)
+    // {
+    //         arr.push( [ WordCloud_key[i], WordCloud_values[i] ] );
+    // }
+
+    var WordCloudarr = [];
+   // WordCloud_a= [[${WordCloud}]]
+    var WordCloud=[[${WordCloud}]];
+    console.log(WordCloud)
+    for (var key in WordCloud) {
+        if (WordCloud.hasOwnProperty(key)) {
+            WordCloudarr.push( [ key, WordCloud[key] ] );
+        }
+    }
+
+    // WordCloud= [[${WordCloud}]]
+    // WordCloud_values = WordCloud.values()
+    // console.log(WordCloud_values)
+</script>
+
+<script src="https://cdn.bootcss.com/wordcloud2.js/1.1.0/wordcloud2.js"></script>
+<script>
+
+    var options = eval({
+        "list": WordCloudarr,
+        "gridSize": 16, // size of the grid in pixels
+        "weightFactor": 10, // number to multiply for size of each word in the list
+        "fontWeight": 'normal', // 'normal', 'bold' or a callback
+        "fontFamily": 'Times, serif', // font to use
+        "color": 'random-light', // 'random-dark' or 'random-light'
+        "backgroundColor": 'none', // the color of canvas
+        "mode":'RGBA',
+        "rotateRatio": 1 // probability for the word to rotate. 1 means always rotate
+    });
+    var canvas = document.getElementById('puleftbox2bott_cont');
+    WordCloud(canvas, options);
 </script>
 
 </body>
