@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="assets/images/favicon.png">
+
+
+    <!-- CSS
+        ================================================== -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <script th:src="@{/js/numberDeal.js}"></script>
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!--side-bar-menu-->
+        <div th:replace="~{commons/commons::sidebar-menu}"></div>
+        <!--header-->
+        <div th:replace="~{commons/commons::main_header}"></div>
+
+        <!-- contents -->
+        <div class="main_content">
+
+            <div class="channal">
+                <div class="channal-cover">
+
+                    <!-- channal cover -->
+                    <img th:src="@{'/img/course/course_'+${courseVideo.getCourse_id()}+'.jpg'}" alt="">
+
+                </div>
+
+                <div class="main_content_inner">
+                    <div class="channal-details">
+                        <div class="left-side">
+                            <div class="channal-image">
+                                <a href="#">
+                                    <img th:src="@{'/img/avatars/avatar-'+${teacherInfo.getTeacher_id()}+'.jpg'}" alt="">
+                                </a>
+                            </div>
+
+                            <div class="channal-details-info">
+                                <h3 th:text="${teacherInfo.getTeacher_name()}"> </h3>
+<!--                                <p th:text="${teacherInfo.getTeacher_follow_num()}+' 关注'"></p>-->
+                                <p id="teacher_info_follow_num"></p>
+                            </div>
+                        </div>
+                        <div class="right-side">
+                            <div class="btn-subscribe">
+                                <a href="#" class="button soft-warning"> <i class="icon-feather-plus"></i> 关注
+                                </a>
+                                <span class="subs-amount" id="span_teacher_follow"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="nav-channal" k-sticky="offset:61;media : @s">
+                        <div th:replace="~{commons/course::responsive-tab(TopBarActive='4')}"></div>
+                        <form class="nav-channal-saerchbox">
+                            <i class="uil-search"></i>
+                            <input class="uk-input" type="text" value="搜索视频">
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="main_content_inner" >
+                <div class="comments mt-4">
+                    <h3> 课程评论 <span class="comments-amount" th:text="${commentsSize}"></span> </h3>
+
+                    <ul th:each="commentRoot:${commentsRoot}">
+                        <li>
+                            <div class="avatar"><img th:src="@{'/img/avatars/'+${commentRoot.getOwner_avatar()}}" alt="">
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-by">
+                                    <div class="comment-by" th:text="${commentRoot.getOwner_name()}"></div>
+                                    <span th:text="${commentRoot.getOwner_identity()} + ' ' + ${#dates.format(commentRoot.getCreate_time(),'yyyy-MM-dd')}"></span>
+                                    <a href="#" class="reply" ><i class="icon-line-awesome-undo"></i>回复</a>
+                                </div>
+                                <p th:text="${commentRoot.getContent()}"> </p>
+                            </div>
+
+                            <ul th:each="commentReply:${commentRoot.getCommentsReplyList()}">
+                                <li>
+                                    <div class="avatar"><img th:src="@{'/img/avatars/'+${commentReply.getFrom_avatar()}}" alt="">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-by" >
+                                            <div class="comment-by" th:text="${commentReply.getFrom_name()}"></div>
+                                            <span th:text="${commentReply.getFrom_identity()}+ ' ' + ${#dates.format(commentReply.getCreate_time(),'yyyy-MM-dd')}"></span>
+                                            <a href="#" class="reply" th:if="${commentRoot.getCommentsReplyList().size()}"><i class="icon-line-awesome-undo"></i>
+                                                回复</a>
+                                        </div>
+                                        <p th:text="${commentReply.getContent()}"></p>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="comments">
+                    <h4>留下你的评论</h4>
+                    <ul>
+                        <li>
+                            <div class="avatar"><img  th:src="@{'/img/avatars/avatar-' +${student_id} + '.jpg'}" alt="">
+                            </div>
+
+                            <div class="comment-content">
+                                <form class="uk-grid-small" uk-grid>
+                                    <div class="uk-width-1-1@s">
+                                        <label class="uk-form-label">评论</label>
+                                        <textarea class="uk-textarea" placeholder="请输入评论..."
+                                                  style=" height:160px"></textarea>
+                                    </div>
+                                    <div class="uk-grid-margin">
+                                        <input type="submit" value="提交" class="button warning">
+                                    </div>
+                                </form>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+                <!-- footer
+               ================================================== -->
+                <div th:replace="~{commons/commons::footer}"></div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- For Night mode -->
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+
+    <!-- javaScripts
+    ================================================== -->
+    <script th:src="@{/js/framework.js}"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/simplebar.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:inline="javascript">
+        <!--设置粉丝数-->
+        var teacher_follow_num = [[${teacherInfo.getTeacher_follow_num()}]];
+        var p_teacher_follow = document.getElementById(id="teacher_info_follow_num");
+        p_teacher_follow.textContent = getUnitNumber(teacher_follow_num);
+        //设置关注时的粉丝数
+        var span_teacher_follow = document.getElementById(id="span_teacher_follow");
+        span_teacher_follow.textContent = getUnitNumber(teacher_follow_num);
+        //设置教师课程观看
+        //循环设置粉丝数
+        // var videoFollows = [[${videoFollows}]];
+        // //console.log(allFollowedTeachers);
+        // var p_li = document.getElementById("div-video-info").getElementsByTagName('p');
+        // var span_video_num = document.getElementById("div-video-info").getElementsByClassName('video-post-count');
+        // for(var i=0;i<p_li.length;i++) {
+        //     var videoFollow = videoFollows[i];
+        //     //显示有多少次观看和发布时间
+        //     var video_view_num = videoFollow.video_view_num;
+        //     var fan_video_text = getUnitNumber(video_view_num) + ' 观看 ';
+        //     var text_video_num = getUnitNumber(video_view_num)
+        //     p_li[i].innerHTML=
+        //         "<span class='video-post-user'> " + videoFollow.teacher_name + "</span>" +
+        //         "<span class='video-post-views'>" + fan_video_text + "</span>" +
+        //         "<span class='video-post-date'> 2 weeks ago </span>"
+        //     span_video_num[i].textContent = text_video_num
+        // }
+    </script>
+</body>
+
+</html>

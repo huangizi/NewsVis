@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Eduhash - Education LMS template</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!-- CSS
+================================================== -->
+	<link rel="stylesheet" th:href="@{/css/style.css}" >
+	<link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+	<link rel="stylesheet" th:href="@{/css/framework.css}">
+	<!-- icons
+    ================================================== -->
+	<link rel="stylesheet" th:href="@{/css/icons.css}">
+</head>
+
+<body id="top-header">
+<main class="site-main page-wrapper woocommerce single single-product">
+	<section class="space-3">
+		<div class="container">
+			<div >
+					<h2 class="font-weight-bold mb-4">学习者注册</h2>
+					<form method="post" class="uk-child-width-1-1 uk-grid-small" th:action="@{student/register}">
+
+						<!--账户名-->
+						<div>
+							<div class="uk-form-group">
+								<label class="uk-form-label" th:text="#{login.accountTip}"></label>
+								<div class="uk-position-relative w-100">
+                                    <span class="uk-form-icon">
+                                        <i class="icon-feather-user"></i>
+                                    </span>
+									<input class="uk-input" type="text" name="username" autocomplete="user-name" th:placeholder="#{login.accountTip}">
+								</div>
+							</div>
+						</div>
+						<!--密码-->
+						<div class="uk-form-group">
+							<div class="uk-form-group">
+								<label class="uk-form-label" th:text="#{login.passwordTip}"></label>
+								<div class="uk-position-relative w-100">
+                                    <span class="uk-form-icon">
+                                        <i class="icon-feather-lock"></i>
+                                    </span>
+									<input class="uk-input" name="password" type="password" th:placeholder="#{login.passwordTip}">
+								</div>
+
+							</div>
+						</div>
+						<!--请再次输入密码-->
+						<div class="uk-form-group">
+							<div class="uk-form-group">
+								<label class="uk-form-label" th:text="#{login.comfirmPassword}"></label>
+
+								<div class="uk-position-relative w-100">
+                                    <span class="uk-form-icon">
+                                        <i class="icon-feather-lock"></i>
+                                    </span>
+									<input class="uk-input" type="password" name="password" th:placeholder="#{login.comfirmPassword}">
+								</div>
+
+							</div>
+						</div>
+						<!--邮箱-->
+						<div class="uk-form-group">
+							<label class="uk-form-label" th:text="#{login.email}"></label>
+							<div class="uk-position-relative w-100">
+                                <span class="uk-form-icon">
+                                    <i class="icon-feather-mail"></i>
+                                </span>
+								<input class="uk-input" name="email" type="email" th:placeholder="#{login.emailTip}">
+							</div>
+						</div>
+						<!--联系方式-->
+						<div>
+							<div class="uk-form-group">
+								<label class="uk-form-label" th:text="#{login.phone}"></label>
+								<div class="uk-position-relative w-100">
+                                    <span class="uk-form-icon">
+                                        <i class="icon-line-awesome-phone"></i>
+                                    </span>
+									<input class="uk-input" type="text" name="phoneNumber" autocomplete="user-name" th:placeholder="#{login.phone}">
+								</div>
+							</div>
+						</div>
+						<!--学校-->
+						<div>
+							<div class="uk-form-group">
+								<label class="uk-form-label" th:text="#{login.school}"></label>
+								<div class="uk-position-relative w-100">
+									<span class="uk-form-icon">
+                                        <i class="icon-line-awesome-home"></i>
+                                    </span>
+									<input class="uk-input" type="text" name="schoolName" autocomplete="user-name" th:placeholder="#{login.school}">
+								</div>
+							</div>
+						</div>
+						<!--专业-->
+						<div>
+							<div class="uk-form-group">
+								<label class="uk-form-label" th:text="#{login.major}"></label>
+								<div class="uk-position-relative w-100">
+									<span class="uk-form-icon">
+                                        <i class="icon-line-awesome-pencil"></i>
+                                    </span>
+									<input class="uk-input" type="text" name="major" th:placeholder="#{login.major}">
+								</div>
+							</div>
+						</div>
+
+						<div style="text-align:center">
+							<div class="mt-4 uk-flex-middle uk-grid-small" uk-grid>
+								<div class="uk-width-expand@s">
+									<p> 已经注册过账户了 <a href="form-modern-login.html" th:text="#{login.return}"></a></p>
+								</div>
+								<div class="uk-width-auto@s">
+									<input type="submit" class="button warning" th:value="#{login.register}"></input>
+								</div>
+							</div>
+						</div>
+
+					</form>
+			</div>
+		</div>
+	</section>
+	<!--shop category end-->
+</main>
+
+
+</body>
+</html>

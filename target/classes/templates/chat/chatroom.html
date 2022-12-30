@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>websocket</title>
+    <!--socket-->
+    <script src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdn.bootcss.com/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <!--vue-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--elementUI-->
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!--axios-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    <style type="text/css">
+
+        body{
+            background-color: #f4f7f6;
+            margin-top:20px;
+        }
+        .card {
+            background: #fff;
+            transition: .5s;
+            border: 0;
+            margin-bottom: 30px;
+            border-radius: .55rem;
+            position: relative;
+            width: 100%;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+        }
+        .chat-app .people-list {
+            width: 280px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            z-index: 7
+        }
+
+        .chat-app .chat {
+            margin-left: 280px;
+            border-left: 1px solid #eaeaea
+        }
+
+        .people-list {
+            -moz-transition: .5s;
+            -o-transition: .5s;
+            -webkit-transition: .5s;
+            transition: .5s
+        }
+
+        .people-list .chat-list li {
+            padding: 10px 15px;
+            list-style: none;
+            border-radius: 3px
+        }
+
+        .people-list .chat-list li:hover {
+            background: #efefef;
+            cursor: pointer
+        }
+
+        .people-list .chat-list li.active {
+            background: #efefef
+        }
+
+        .people-list .chat-list li .name {
+            font-size: 15px
+        }
+
+        .people-list .chat-list img {
+            width: 45px;
+            border-radius: 50%
+        }
+
+        .people-list img {
+            float: left;
+            border-radius: 50%
+        }
+
+        .people-list .about {
+            float: left;
+            padding-left: 8px
+        }
+
+        .people-list .status {
+            color: #999;
+            font-size: 13px
+        }
+
+        .chat .chat-header {
+            padding: 15px 20px;
+            border-bottom: 2px solid #f4f7f6
+        }
+
+        .chat .chat-header img {
+            float: left;
+            border-radius: 40px;
+            width: 40px
+        }
+
+        .chat .chat-header .chat-about {
+            float: left;
+            padding-left: 10px
+        }
+
+        .chat .chat-history {
+            padding: 20px;
+            border-bottom: 2px solid #fff
+        }
+
+        .chat .chat-history ul {
+            padding: 0
+        }
+
+        .chat .chat-history ul li {
+            list-style: none;
+            margin-bottom: 30px
+        }
+
+        .chat .chat-history ul li:last-child {
+            margin-bottom: 0px
+        }
+
+        .chat .chat-history .message-data {
+            margin-bottom: 15px
+        }
+
+        .chat .chat-history .message-data img {
+            border-radius: 40px;
+            width: 40px
+        }
+
+        .chat .chat-history .message-data-time {
+            color: #434651;
+            padding-left: 6px
+        }
+
+        .chat .chat-history .message {
+            color: #444;
+            padding: 18px 20px;
+            line-height: 26px;
+            font-size: 16px;
+            border-radius: 7px;
+            display: inline-block;
+            position: relative
+        }
+
+        .chat .chat-history .message:after {
+            bottom: 100%;
+            left: 7%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-bottom-color: #fff;
+            border-width: 10px;
+            margin-left: -10px
+        }
+
+        .chat .chat-history .my-message {
+            background: #efefef
+        }
+
+        .chat .chat-history .my-message:after {
+            bottom: 100%;
+            left: 30px;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+            border-bottom-color: #efefef;
+            border-width: 10px;
+            margin-left: -10px
+        }
+
+        .chat .chat-history .other-message {
+            background: #e8f1f3;
+            text-align: right
+        }
+
+        .chat .chat-history .other-message:after {
+            border-bottom-color: #e8f1f3;
+            left: 93%
+        }
+
+        .chat .chat-message {
+            padding: 20px
+        }
+
+        .online,
+        .offline,
+        .me {
+            margin-right: 2px;
+            font-size: 8px;
+            vertical-align: middle
+        }
+
+        .online {
+            color: #86c541
+        }
+
+        .offline {
+            color: #e47297
+        }
+
+        .me {
+            color: #1d8ecd
+        }
+
+        .float-right {
+            float: right
+        }
+
+        .clearfix:after {
+            visibility: hidden;
+            display: block;
+            font-size: 0;
+            content: " ";
+            clear: both;
+            height: 0
+        }
+
+        @media only screen and (max-width: 767px) {
+            .chat-app .people-list {
+                height: 465px;
+                width: 100%;
+                overflow-x: auto;
+                background: #fff;
+                left: -400px;
+                display: none
+            }
+            .chat-app .people-list.open {
+                left: 0
+            }
+            .chat-app .chat {
+                margin: 0
+            }
+            .chat-app .chat .chat-header {
+                border-radius: 0.55rem 0.55rem 0 0
+            }
+            .chat-app .chat-history {
+                height: 300px;
+                overflow-x: auto
+            }
+        }
+
+        @media only screen and (min-width: 768px) and (max-width: 992px) {
+            .chat-app .chat-list {
+                height: 650px;
+                overflow-x: auto
+            }
+            .chat-app .chat-history {
+                height: 600px;
+                overflow-x: auto
+            }
+        }
+
+        @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+            .chat-app .chat-list {
+                height: 480px;
+                overflow-x: auto
+            }
+            .chat-app .chat-history {
+                height: calc(100vh - 350px);
+                overflow-x: auto
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <div id="nave">
+        <span style="position: absolute;padding-top: 16px;right: 8%;font-size: 16px;font-weight: bold;">当前用户：</span>
+        <span style="position: absolute;padding-top: 12px;right: 2%;font-size: 16px;font-weight: bold;" @click="showSenderInfo"><el-link href="#" type="info" style="font-size: 20px;color: black;">{{sendUser}}</el-link></span>
+        <input id="username" th:value="${username}" style="display: none;"/><!--隐藏域-->
+    </div>
+
+    <div class="container" xmlns:th="http://www.thymeleaf.org">
+        <div class="col-lg-12">
+            <div class="card chat-app">
+            <div id="side">
+                <div id="plist" class="people-list">
+<!--                    <el-menu class="list-unstyled chat-list mt-2 mb-0">-->
+<!--                        <el-menu-item class="clearfix" v-for="(item,i) in navList" :key="i" :index="item.name" @click="changeReceiver(item.navItem)">-->
+<!--                            <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">-->
+<!--                            <div class="about">-->
+<!--                                <div class="name">{{ item.navItem }}</div>-->
+<!--                            </div>-->
+<!--                        </el-menu-item>-->
+<!--                    </el-menu>-->
+                    <el-menu class="list-unstyled chat-list mt-2 mb-0" id="menu-people-list">
+                        <el-menu-item class="clearfix"  @click="changeReceiver('所有人')">
+                            <img th:src="${avatars[0]}" alt="">
+                            <div class="about">
+                                <div class="name" th:text="所有人"></div>
+                            </div>
+                        </el-menu-item>
+
+                        <el-menu-item class="clearfix"  @click="changeReceiver('可视化导论课程群')">
+                            <img th:src="${avatars[1]}" alt="">
+                            <div class="about">
+                                <div class="name" th:text="可视化导论课程群"></div>
+                            </div>
+                        </el-menu-item>
+
+                        <el-menu-item class="clearfix"  @click="changeReceiver('Freya')">
+                            <img th:src="${avatars[2]}" alt="">
+                            <div class="about">
+                                <div class="name" th:text="Freya"></div>
+                            </div>
+                        </el-menu-item>
+
+                        <el-menu-item class="clearfix"  @click="changeReceiver('鸭鸭')">
+                            <img th:src="${avatars[3]}" alt="">
+                            <div class="about">
+                                <div class="name" th:text="鸭鸭"></div>
+                            </div>
+                        </el-menu-item>
+
+                        <el-menu-item class="clearfix"  @click="changeReceiver('Mr_松鼠')">
+                            <img th:src="${avatars[4]}" alt="">
+                            <div class="about">
+                                <div class="name" th:text="Mr_松鼠"></div>
+                            </div>
+                        </el-menu-item>
+
+                        <el-menu-item class="clearfix"  @click="changeReceiver('清风')" th:if="${username} eq '资资'">
+                            <img th:src="${avatars[5]}" alt="">
+                            <div class="about">
+                                <div class="name" th:text="清风"></div>
+                            </div>
+                        </el-menu-item>
+
+                        <el-menu-item class="clearfix"  @click="changeReceiver('资资')" th:if="${username} eq '清风'">
+                            <img th:src="${avatars[5]}" alt="">
+                            <div class="about">
+                                <div class="name" th:text="资资"></div>
+                            </div>
+                        </el-menu-item>
+
+                    </el-menu>
+
+                    <el-menu style="height: 100%"
+                             default-active="All"
+                             class="el-menu-vertical-demo"
+                             background-color="#545c64"
+                             text-color="#fff"
+                             active-text-color="#ffd04b">
+                    </el-menu>
+
+                </div>
+            </div>
+
+            <div id="chat" class="chat">
+                <div class="chat-header clearfix">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+<!--                                <img src="/img/avatars/avatar-1102170114.jpg" alt="avatar" th:if="${username} eq '资资'">-->
+<!--                                <img src="/img/avatars/avatar-1102170115.jpg" alt="avatar" th:if="${username} eq '清风'">-->
+                            </a>
+                            <div class="chat-about">
+                                <h6 class="m-b-0" id="chatName"></h6>
+<!--                                <small>Last seen: 2 hours ago</small>-->
+                            </div>
+                        </div>
+                        <div class="col-lg-6 hidden-sm text-right">
+                            <a href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-camera"></i></a>
+                            <a href="javascript:void(0);" class="btn btn-outline-primary"><i class="fa fa-image"></i></a>
+                            <a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
+                            <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-question"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-history" style="height: 500px">
+                    <ul class="m-b-0" id="tbody">
+
+                    </ul>
+                </div>
+
+                <div >
+                    <div class="chat-message clearfix" id="send">
+                        <div class="input-group mb-0">
+                            <div class="input-group-prepend">
+                                <el-button @click="send" class="input-group-text" ><i class="fa fa-send"></i></el-button>
+                            </div>
+                            <el-input type="text" class="form-control" placeholder="请输入内容" v-model="text" style="height:auto" ></el-input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+    <!--用户信息-->
+    <el-dialog
+            center
+            :title="dialogTitle"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+        <div class="dialog">
+            <div class="dialogLeft">
+                <el-image
+                        style="width: 120px; height: 120px;border-radius: 60px;margin-left: 50px;"
+                        :src="userInfo.avatar"
+                        :preview-src-list="srcList">
+                </el-image>
+            </div>
+            <div class="dialogRight">
+                <div>
+                    <i class="el-icon-s-custom"></i>
+                    <span style="margin-right: 30px;margin-left: 10px;">昵称</span>
+                    <span>{{userInfo.username}}</span>
+                </div>
+                <div>
+                    <i class="el-icon-user"></i>
+                    <span style="margin-right: 30px;margin-left: 10px;">账号</span>
+                    <span>{{userInfo.account}}</span>
+                </div>
+                <div>
+                    <i class="el-icon-finished"></i>
+                    <span style="margin-right: 30px;margin-left: 10px;">等级</span>
+                    <span>LV</span>
+                    <span>{{userInfo.level}}</span>
+                </div>
+            </div>
+        </div>
+    </el-dialog>
+
+    <!--预览图-->
+    <img id="src" src="" style="display: none" onclick="closeSrc()" title="点击关闭预览图">
+</div>
+</body>
+
+
+<script>
+    function showSrc(obj){
+        /*console.log(obj)
+        alert(obj.src)*/
+        document.getElementById("src").style.display="inline-block"
+        document.getElementById("src").src=obj.src
+    }
+    function closeSrc(){
+        document.getElementById("src").style.display="none"
+
+    }
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                text:'',
+                remarks:'',
+                webSocket:'',
+                navList: [
+                    {name: 'All', navItem: '所有人'},
+                    {name: 'Jack', navItem: 'Jack'},
+                     {name: 'Rose', navItem: 'Rose'},
+                     {name: 'Tom', navItem: 'Tom'}
+                ],
+                receiveUser:'所有人',
+                sendUser:'sendUser',
+                time:'',
+                receiveFrom:'',
+
+                dialogTitle:'我的资料',
+                dialogVisible:false,
+                srcList: [
+                ],
+                userInfo: {
+                    id: '',
+                    account:'',
+                    username:'',
+                    password:'',
+                    avatar:'',
+                    level:'',
+                },
+            }
+        },
+        mounted(){
+            this.sendUser=document.getElementById("username").value//初始化send用户名
+            this.time=new Date().toLocaleString()//当前时间
+
+            var self=this
+
+            //判断当前浏览器是否支持WebSocket
+            if ("WebSocket" in window) {
+                this.webSocket = new WebSocket("ws://localhost:8080/websocket/" + this.sendUser);
+                var webSocket=this.webSocket
+
+                //连通之后的回调事件
+                webSocket.onopen = function () {
+                    //webSocket.send( document.getElementById('username').value+"已经上线了");
+                    console.log("已连通websocket");
+                    self.setHint("欢迎登录： "+self.sendUser);
+                };
+
+                //接收后台服务端的消息
+                webSocket.onmessage = function (evt) {
+                    // console.log(evt);
+
+                    var received_msg = evt.data;
+                    // console.log("数据已接收:" + received_msg);
+                    var obj = JSON.parse(received_msg);
+                    // console.log(obj);
+
+                    if(obj.messageType != 5){
+                        console.log("数据已接收:" + received_msg);
+                    }else{
+                        console.log("接收到图片");
+                    }
+                    console.log("消息类型:" + obj.messageType);
+
+                    //1代表上线 2代表下线 3代表在线名单 4代表普通消息 5图片
+                    if (obj.messageType == 1) {
+                        //把名称放入到侧边栏
+                        var onlineName = obj.username;
+                        self.navList.push({name:onlineName,navItem:onlineName})
+                        self.setHint(onlineName + "上线了");
+                        // document.getElementById("menu-people-list").innerHTML +=
+                        //     '<el-menu-item class="clearfix"  @click="changeReceiver(\'Mr_松鼠\')">' +
+                        //     '<img th:src="${avatars[3]}" alt="">' +
+                        //     '<div class="about">' +
+                        //     '<div class="name" th:text="Mr_松鼠">' +
+                        //     '</div>' +
+                        //     '</el-menu-item>'
+
+                    } else if (obj.messageType == 2) {
+                        self.navList=[
+                            {name:'All',navItem: '所有人'},
+                        ];
+                        var onlineName = obj.onlineUsers;
+                        var offlineName = obj.username;
+                        for (var i = 0; i < onlineName.length; i++) {
+                            if (!(onlineName[i] == self.sendUser)) {
+                                self.navList.push({name:onlineName[i],navItem:onlineName[i]})
+                            }
+                        }
+                        if(offlineName==self.receiveUser){//判断接收用户是否下线
+                            self.receiveUser='所有人'
+                        }
+                        self.setHint(offlineName + "下线了");
+                    } else if (obj.messageType == 3) {
+                        var onlineName = obj.onlineUsers;
+                        for (var i = 0; i < onlineName.length; i++) {
+                            if (!(onlineName[i] == self.sendUser)) {//除了用户自己，其他用户都动态加载到侧边栏
+                                self.navList.push({name:onlineName[i],navItem:onlineName[i]})
+                            }
+                        }
+                        console.log("在线用户名单: " + onlineName.toString());
+                    } else if (obj.messageType == 4){
+                        self.receiveFrom=obj.fromusername
+                        // self.setMessageInnerHTML(obj.fromusername + "对" + obj.tousername + "说：" + obj.textMessage);
+                        self.setMessageInnerHTML(obj.textMessage);
+                        self.changeReceiver(self.receiveUser)//防止直接在接收者当前窗口直接附加html
+                        self.setHint("您有一条来自"+obj.fromusername+"的新消息");
+                    }else{
+                        self.receiveFrom=obj.fromusername
+                        // alert(obj.fromusername)
+                        self.setPictureMessageInnerHTML(obj.textMessage);
+                        self.changeReceiver(self.receiveUser)//防止直接在接收者当前窗口直接附加html
+                        self.setHint("您有一条来自"+obj.fromusername+"的新消息");
+                    }
+                };
+
+                //连接关闭的回调事件
+                webSocket.onclose = function () {
+                    console.log("连接已关闭...");
+                    self.setHint("连接已经关闭....");
+                };
+            } else {
+                // 浏览器不支持 WebSocket
+                alert("您的浏览器不支持 WebSocket!");
+            }
+        },
+        methods:{
+            preText (pretext) {//文本域换行保留原格式
+                return pretext.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;')
+            },
+            changeReceiver(name){
+                // alert(name)
+                this.receiveUser=name
+
+                var receiver=this.receiveUser
+                if(receiver=='所有人')
+                    receiver='All';
+                //其余人display：none
+                var list=document.getElementsByClassName(receiver)
+                for (let i = 0; i < list.length; i++) {
+                    list[i].style.display='inline-block'
+                }
+                for (let i = 0; i < this.navList.length; i++) {
+                    if(this.navList[i].name!=receiver){
+                        list=document.getElementsByClassName(this.navList[i].name);
+                        for (let i = 0; i < list.length; i++) {
+                            list[i].style.display='none';
+                        }
+                    }
+                }
+                //不管前面做了什么，最后一定让发给所有人的消息一直显示
+                list=document.getElementsByClassName("All")
+                for (let i = 0; i < list.length; i++) {
+                    list[i].style.display='inline-block'
+                }
+                document.getElementById("chatName").textContent = this.receiveUser;
+            },
+
+            //收  收到消息判断发送方，修改receiveUser
+            setMessageInnerHTML(innerHTML) {
+                var receiveUser=this.receiveFrom
+                // document.getElementById('receive').innerHTML += '<span>'+innerHTML +'</span>' +'<br/>';
+                //改变接收的消息的样式
+                //document.getElementById("tbody").innerHTML += '<tr class='+receiveUser+'><td style="color: black;background-color: #e5e5e5;border: none; box-shadow: 0 2px 12px 0 gray;">'+innerHTML+'</td></tr>';
+
+                //资资发来的消息
+                if(receiveUser == '资资')
+                {
+                    document.getElementById("tbody").innerHTML +=
+                        '<li class="clearfix">' +
+                        '<div class="message-data text-left">' +
+                        '<span class="message-data-time">资资</span>' +
+                        '<img src="/img/avatars/avatar-1102170115.jpg" alt="avatar" style="float: left">' +
+                        '</div>' +
+                        '<div class="message my-message float-left"> ' +
+                        innerHTML +
+                        '</div>' +
+                        '</li>'
+                }
+                //清风发来的消息
+                else if(receiveUser == '清风')
+                {
+                    document.getElementById("tbody").innerHTML +=
+                        '<li class="clearfix">' +
+                        '<div class="message-data text-left">' +
+                        '<span class="message-data-time">清风</span>' +
+                        '<img src="/img/avatars/avatar-1102170114.jpg" alt="avatar" style="float: left">' +
+                        '</div>' +
+                        '<div class="message my-message float-left"> ' +
+                        innerHTML +
+                        '</div>' +
+                        '</li>'
+                }
+
+            },
+
+            setPictureMessageInnerHTML(url){
+                var receiveUser=this.receiveFrom
+                document.getElementById("tbody").innerHTML += '<tr class='+receiveUser+'><td style="border: none;padding: 0;box-shadow: none;"><img title="点击显示预览图" onclick="showSrc(this)"  width="150px" src='+url+'></td></tr>';
+            },
+
+            //发  直接在窗口加html，之后用户点击别的接收者了调用changeReceiver，通过不同class决定是否显示
+            sendMessage(innerHTML) {
+                var receiveUser=this.receiveUser
+                if(receiveUser=='所有人'){//每个用户的窗口都要发送
+                    receiveUser='All';
+                    //class为All,所有人都看得到
+                    //document.getElementById("tbody").innerHTML += '<tr class='+receiveUser+'><td style="float: right">'+innerHTML+'</td></tr>';
+                    // document.getElementById("tbody").innerHTML +=
+                    // '<li class="clearfix">' +
+                    //         '<div class="message-data text-right">' +
+                    //         '<span class="message-data-time">10:10 AM, Today</span>' +
+                    //         '<img src="/img/avatars/avatar-1102170115.jpg" alt="avatar" style="float: right">' +
+                    //         '</div>' +
+                    //         '<div class="message other-message float-right"> ' +
+                    //         innerHTML +
+                    //         '</div>' +
+                    // '</li>';
+                }else{
+                        if(receiveUser == '资资')
+                        {
+                            document.getElementById("tbody").innerHTML +=
+                                '<li class="clearfix">' +
+                                '<div class="message-data text-right">' +
+                                '<span class="message-data-time">我</span>' +
+                                '<img src="/img/avatars/avatar-1102170114.jpg" alt="avatar" style="float: right">' +
+                                '</div>' +
+                                '<div class="message other-message float-right"> ' +
+                                innerHTML +
+                                '</div>' +
+                                '</li>'
+                        }else if (receiveUser == '清风')
+                        {
+                            document.getElementById("tbody").innerHTML +=
+                            '<li class="clearfix">' +
+                            '<div class="message-data text-right">' +
+                            '<span class="message-data-time">我</span>' +
+                            '<img src="/img/avatars/avatar-1102170115.jpg" alt="avatar" style="float: right">' +
+                            '</div>' +
+                            '<div class="message other-message float-right"> ' +
+                            innerHTML +
+                            '</div>' +
+                            '</li>'
+                        }
+
+                }
+            },
+
+            //暂时只发送URL
+            sendPictureMessage(url){
+                var receiveUser=this.receiveUser
+                if(receiveUser=='所有人'){//每个用户的窗口都要发送
+                    receiveUser='All';
+                    document.getElementById("tbody").innerHTML += '<tr class='+receiveUser+'><td style="float: right;border: none;padding: 0;box-shadow: none;"><img title="点击显示预览图" onclick="showSrc(this)" width="150px" src='+url+'></td></tr>';
+                }else{
+                    document.getElementById("tbody").innerHTML += '<tr class='+receiveUser+'><td style="float: right;border: none;padding: 0;box-shadow: none;"><img title="点击显示预览图" onclick="showSrc(this)" width="150px" src='+url+'></td></tr>';
+                }
+            },
+
+            setHint(innerHTML){
+                this.$notify.info({
+                    title: '提示',
+                    message: ''+innerHTML,
+                    duration: 5000,
+                    offset: 70,
+                });
+                //  5s
+            },
+
+            closeWebSocket() {
+                //直接关闭websocket的连接
+                this.webSocket.close();
+            },
+
+            //发送普通文字消息
+            send() {
+                this.remarks = this.preText(this.text);
+                var selectText = this.receiveUser;//选择的接收方
+                //先把发送的消息附加到前端，再发送给后端
+                if (selectText == "所有人") {
+                    selectText = "All";
+                    // this.sendMessage(this.sendUser + "对所有人说：" + this.remarks);
+                    this.sendMessage(this.remarks);
+                } else {
+                    // this.setMessageInnerHTML(this.sendUser + "对" + selectText + "说：" + this.text);
+                    // this.sendMessage(this.sendUser + "对" + selectText + "说：" + this.remarks);
+                    this.sendMessage(this.remarks);
+                }
+                var message = {
+                    "type":1,
+                    "message": this.remarks,
+                    "username": this.sendUser,
+                    "to": selectText
+                };
+                this.webSocket.send(JSON.stringify(message));
+                this.text='';//发送完消息就清空
+                console.log("清空消息");
+                this.remarks=''
+            },
+
+            sendPicture(){
+                document.getElementById("f").click()
+            },
+            //发送图片消息
+            chooseFile() {
+                var files = document.querySelector("#f").files
+                var self=this
+
+                if(files.length>0) {
+                    var fileReader = new FileReader();
+                    fileReader.readAsDataURL(files[0])
+
+                    fileReader.onload = function (e) {
+                        var selectText = self.receiveUser;//选择的接收方
+                        //先把发送的图片附加到前端，再发送给后端
+                        if (selectText == "所有人") {
+                            selectText = "All";
+                            self.sendPictureMessage(e.target.result);
+                        } else {
+                            self.sendPictureMessage(e.target.result);
+                        }
+
+
+                        var message = {
+                            "type":2,
+                            "message": e.target.result,
+                            "username": self.sendUser,
+                            "to": selectText
+                        };
+                        self.webSocket.send(JSON.stringify(message));
+                    }
+                }
+                //上传结束，清空文件，否则下一次如果上传同样的图片就不会触发onchange
+                var f = document.getElementById('f');
+                f.value = ""
+
+            },
+
+            showReceiverInfo(){
+                if(this.receiveUser!='所有人'){
+                    // alert(this.receiveUser)
+                    this.dialogVisible=true
+                    this.dialogTitle=this.receiveUser+'的资料'
+                    this.queryUser(this.receiveUser)
+                }
+            },
+            showSenderInfo(){
+                // alert(this.sendUser)
+                this.dialogVisible=true
+                this.dialogTitle='我的资料'
+                this.queryUser(this.sendUser)
+            },
+
+            queryUser (username) {
+                // alert("query: "+username)
+                var _this = this
+                var url='/userInfo?username='+username
+                axios.get(url).then(resp => {
+                    if (resp && resp.status === 200) {
+                        _this.userInfo = resp.data
+                        // console.log(resp.data)
+                        // alert(_this.userInfo.avatar)
+                        _this.srcList.push(_this.userInfo.avatar)
+                    }
+                })
+            },
+            handleClose(){
+                this.srcList.pop()
+                this.dialogVisible=false
+            },
+
+        }
+    })
+</script>
+
+
+
+<style>
+    /*.Jack{
+        color:red;
+    }*/
+    #src{
+        position: absolute;
+        top: 0;
+        height: 750px;
+        width: 750px;
+        left: 26%;
+    }
+    html,body{
+        margin: 0;
+        padding: 0;
+        height: 100%;
+    }
+    #app{
+        height: 100%;
+    }
+    #nave,#side,#chat,#receive,#send{
+        /*border: 1px solid red;*/
+    }
+    #nave{
+        height: 7%;
+        background-color: #EEE9E9;
+    }
+    #side{
+        float: left;
+        height: 93%;
+        width: 15%;
+        /*border-right: 1px solid gray;*/
+        overflow: auto;
+    }
+    #chat{
+        float: right;
+        height: 93%;
+    }
+    #receive{
+        height: 71%;
+        border-bottom: 1px solid gray;
+        overflow: auto;
+    }
+    #send{
+        height: 28.9%;
+        overflow: auto;
+    }
+    /* #receive span{
+         display: inline-block;
+         margin: 5px;
+         padding: 5px;
+         font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+         font-size: 17px;
+         color: #c3790d;
+         !*background-color: lightyellow;*!
+         border: 2px solid #ED8D01;
+         border-radius: 6px;
+         box-shadow: 0 2px 12px 0 gray;
+     }*/
+    table tr{
+        display: inline-block;
+        width: 99%;
+        height:auto;
+        margin: 5px;
+    }
+    td{
+        padding: 6px;
+        font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+        font-size: 17px;
+        color: #c3790d;
+        /*background-color: lightyellow;*/
+        border: 2px solid #ED8D01;
+        border-radius: 6px;
+        box-shadow: 0 2px 12px 0 gray;
+    }
+    /* .receive{
+         color: black;
+         background-color: #e5e5e5;
+         border: none;
+         box-shadow: 0 2px 12px 0 gray;
+     }*/
+    .dialog{
+        height:150px;
+    }
+    .dialogLeft{
+        float: left;
+    }
+
+    .dialogRight{
+        float: right;
+        margin-right: 20px;
+    }
+    .dialogRight div{
+        margin-bottom: 30px;
+    }
+</style>
+</html>

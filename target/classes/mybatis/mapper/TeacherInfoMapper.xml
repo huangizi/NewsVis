@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freya.onlinetech.mapper.TeacherInfoMapper">
+
+    <select id="getTeacherInfobyId" resultType="TeacherInfo">
+        SELECT * FROM teacher_info where teacher_id=#{teacher_id};
+    </select>
+
+    <select id="getTeacherName" resultType="String">
+        SELECT teacher_name from teacher_info WHERE teacher_id = #{teacher_id};
+    </select>
+
+    <select id="getTeacherAndSchool" resultType="TeacherAndSchool">
+        SELECT * FROM teacher_info,school_info WHERE school_info.school_id = teacher_info.teacher_school_id
+                                                 AND teacher_info.teacher_id = #{teacher_id};
+    </select>
+
+    <select id="getTeacherAllCourse" resultType="_int">
+        SELECT course_info.course_id FROM course_info WHERE course_info.course_teacher_id = #{teacher_id};
+    </select>
+
+
+</mapper>

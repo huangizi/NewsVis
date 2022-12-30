@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta name="referrer" content="no-referrer">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="assets/images/favicon.png">
+
+    <!-- CSS
+        ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/style.css}" >
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}" >
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+    <script th:src="@{/js/numberDeal.js}"></script>
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- sidebar -->
+        <div th:replace="~{commons/commons::sidebar-menu}"></div>
+
+        <!--header-->
+        <div th:replace="~{commons/commons::main_header}"></div>
+
+        <!-- contents -->
+        <div class="main_content">
+            <div class="main_content_inner">
+
+                <h3> 全部教师 </h3>
+
+                <div class="sections-small" id="div-teacher-info">
+                    <ul class="uk-child-width-1-4@m uk-child-width-1-2@s" uk-grid >
+                            <!--todolist:th:href要走到个人页面-->
+                        <li id="li-followed-teacher" class="channal-card animate-this" th:each="allFollowedTeacher:${allFollowedTeachers}" style="list-style-type:none;width:23%;margin:10px 10px 10px 10px;padding:0px ">
+<!--                            <div class="channal-card-thumbnail" th:attr="data-src='/img/channals/img-' +${allFollowedTeacher.getTeacher_school_id()}+ '.jpg' "-->
+                            <a th:href="@{/teacher/singleChannel(teacher_id=${allFollowedTeacher.getTeacher_id()},student_id=${student_id})}">
+                                <div class="channal-card-thumbnail" uk-img>
+                                    <img th:src="${allFollowedTeacher.getSchool_img_name_href()}" alt="" style="width: -webkit-fill-available;">
+                                </div>
+                                <div class="channal-card-body" id="div-fan-info">
+                                    <div class="channal-card-creator">
+                                        <img th:src="@{'/img/avatars/avatar-'+ ${allFollowedTeacher.getTeacher_id()} +'.jpg'}" alt="">
+                                    </div>
+                                    <h4 th:text="${allFollowedTeacher.getTeacher_name()}"></h4>
+                                    <!--                                <p> <span th:text="${allFollowedTeacher.getTeacher_follow_num()}+' 关注   '+${allFollowedTeacher.getTeacher_video_num()} +' 个视频'"></span> </p>-->
+                                    <p> <span class="span-teacher-info"></span></p>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
+
+                <!-- footer
+               ================================================== -->
+                <div th:replace="~{commons/commons::footer}"></div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <!-- For Night mode -->
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+
+    <!-- javaScripts
+    ================================================== -->
+    <script th:src="@{/js/framework.js}"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/simplebar.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:inline="javascript">
+
+        // window.onload = function (){
+        //     var li_followed_techer = document.getElementById("li-followed-teacher");
+        //     li_followed_techer.onclick = function (){
+        //         //th:href="@{/teacher/singleChannel(teacher_id=${teacherFollow.getTeacher_id()},student_id=${student_id})}"
+        //         location.href = "";
+        //     }
+        // }
+        function getUnitNumber(value)
+        {
+            let newValue = ['', '', ''];
+            let fr = 1000;
+            const ad = 1;
+            let num = 3;
+            const fm = 1;
+            while (value / fr >= 1) {
+                fr *= 10;
+                num += 1;
+                //console.log('数字', value / fr, 'num:', num);
+            }
+            if (num <= 4) { // 千
+                newValue[1] = '千';
+                newValue[0] = parseInt((value / 1000).toFixed(1)) + '';
+                console.log(newValue[0]);
+            } else if (num <= 8) { // 万
+                const text1 = parseInt(num - 4) / 3 > 1 ? '千万' : '万';
+                // tslint:disable-next-line:no-shadowed-variable
+                const fm = '万' === text1 ? 10000 : 10000000;
+                newValue[1] = text1;
+                newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+                console.log(newValue[0]);
+            } else if (num <= 16) {// 亿
+                let text1 = (num - 8) / 3 > 1 ? '千亿' : '亿';
+                text1 = (num - 8) / 4 > 1 ? '万亿' : text1;
+                text1 = (num - 8) / 7 > 1 ? '千万亿' : text1;
+                // tslint:disable-next-line:no-shadowed-variable
+                let fm = 1;
+                if ('亿' === text1) {
+                    fm = 100000000;
+                } else if ('千亿' === text1) {
+                    fm = 100000000000;
+                } else if ('万亿' === text1) {
+                    fm = 1000000000000;
+                } else if ('千万亿' === text1) {
+                    fm = 1000000000000000;
+                }
+                newValue[1] = text1;
+                newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+            }
+            if (value < 1000) {
+                newValue[1] = '';
+                newValue[0] = value + '';
+            }
+            return newValue.join('');
+        }
+        var allFollowedTeachers = [[${allFollowedTeachers}]];
+        //console.log(allFollowedTeachers);
+        var p_li = document.getElementById("div-teacher-info").getElementsByTagName('span');
+        for(var i=0;i<p_li.length;i++) {
+            var allFollowedTeacher = allFollowedTeachers[i];
+            //console.log(allFollowedTeacher);
+            // <p> <span th:text="+' 关注   '+ +' 个视频'"
+            var fan_num = allFollowedTeacher.teacher_follow_num;
+            var video_num = allFollowedTeacher.teacher_video_num;
+            var fan_video_text = getUnitNumber(fan_num) + ' 关注  ' + getUnitNumber(video_num) + ' 个视频';
+            //var p_teacher_info = a_li[i].getElementsByClassName("p-teacher-info");
+            //p_teacher_info.
+            //p_li[i].append("<span> ${fan_video_text}</span> ");
+            //var span_fan_video = $(document.createElement("span")).attr({text:fan_video_text});
+            //console.log(span_fan_video);
+            p_li[i].append(fan_video_text);
+            //p_li[i].append();
+            //console.log(p_teacher_info);
+            //append("<span> " + fan_video_text + "</span>")
+        }
+
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Home</title>
+
+
+<link th:href="@{/css/studentData-bootstrap.min.css}" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+<link th:href="@{/css/studentData-style.css}" rel='stylesheet' type='text/css' />
+<link rel="stylesheet" th:href="@{/css/studentData-morris.css}" type="text/css"/>
+<!-- Graph CSS -->
+<link th:href="@{/css/studentData-font-awesome.css}" rel="stylesheet">
+<!-- jQuery -->
+<script th:src="@{/js/studentData-jquery-2.1.4.min.js}"></script>
+<!-- //jQuery -->
+<link href='http://fonts.googleapis.com/css?family=Roboto:700,500,300,100italic,100,400' rel='stylesheet' type='text/css'/>
+<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+
+</head> 
+<body>
+
+<div class="left-content">
+
+                <!--four-grids here-->
+                <div class="four-grids">
+                    <div class="col-md-3 four-grid">
+                        <div class="four-agileits">
+                            <div class="icon">
+                                <i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+                            </div>
+                            <div class="four-text">
+                                <h3>学习累计时长</h3>
+                                <h4> 1067小时  </h4>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 four-grid">
+                        <div class="four-agileinfo">
+                            <div class="icon">
+                                <i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+                            </div>
+                            <div class="four-text">
+                                <h3>完成课程</h3>
+                                <h4>47个课程</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 four-grid">
+                        <div class="four-w3ls">
+                            <div class="icon">
+                                <i class="glyphicon glyphicon-folder-open" aria-hidden="true"></i>
+                            </div>
+                            <div class="four-text">
+                                <h3>互动次数</h3>
+                                <h4>89次</h4>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3 four-grid">
+                        <div class="four-wthree">
+                            <div class="icon">
+                                <i class="glyphicon glyphicon-briefcase" aria-hidden="true"></i>
+                            </div>
+                            <div class="four-text">
+                                <h3>学习预警</h3>
+                                <h4>0次</h4>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--//four-grids here-->
+                <!--agileinfo-grap-->
+                <div class="agileinfo-grap">
+                    <div class="agileits-box">
+                        <header class="agileits-box-header clearfix">
+                            <h3>学习数据</h3>
+                            <div class="toolbar">
+                                <div class="pull-left">
+                                    <div class="btn-group">
+                                        <a href="#" class="btn btn-default btn-xs">日</a>
+                                        <a href="#" class="btn btn-default btn-xs active">月</a>
+                                        <a href="#" class="btn btn-default btn-xs">年</a>
+                                    </div>
+                                </div>
+                                <div class="pull-right">
+                                    <div class="btn-group">
+                                        <a aria-expanded="false" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            导出 <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right" role="menu">
+                                            <li><a href="#">下载为PDF文件</a></li>
+                                            <li><a href="#">下载为CSV文件</a></li>
+                                            <li><a href="#">下载为PNG图片</a></li>
+                                            <li class="divider"></li>
+                                        </ul>
+                                    </div>
+                                    <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-cog"></i></a>
+                                </div>
+                            </div>
+                        </header>
+                        <div class="agileits-box-body clearfix">
+                            <div id="hero-area"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 wthree-crd">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="widget widget-report-table">
+                                <header class="widget-header m-b-15">
+                                </header>
+
+                                <div class="row m-0 md-bg-grey-100 p-l-20 p-r-20">
+                                    <div class="col-md-6 col-sm-6 col-xs-6 w3layouts-aug">
+                                        <h3>课程学习情况</h3>
+<!--                                        <p>REPORT</p>-->
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6 ">
+                                        <h2 class="text-right c-teal f-300 m-t-20">78小时</h2>
+                                    </div>
+                                </div>
+
+                                <div class="widget-body p-15">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>课程名称</th>
+                                            <th>授课教师</th>
+                                            <th>学习时长</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <!--这里时是课程的ID-->
+                                            <td>1</td>
+                                            <td>可视化导论</td>
+                                            <td>28小时</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>电路分析基础</td>
+                                            <td>20小时</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>3</td>
+                                            <td>《孟子》精读</td>
+                                            <td>15小时</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>普通物理</td>
+                                            <td>10小时</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>普通天文学</td>
+                                            <td>5小时</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4 w3-agileits-crd">
+
+                    <div class="card card-contact-list">
+                        <div class="agileinfo-cdr">
+                            <div class="card-header">
+                                <h3>学习排行榜</h3>
+                            </div>
+                            <div class="card-body p-b-20">
+                                <div class="list-group">
+                                    <a class="list-group-item media" href="">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">1</div>
+                                        </div>
+                                        <div class="pull-left">
+                                            <img class="lg-item-img" src="images/in1.jpg" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="pull-left">
+                                                <div class="lg-item-heading">鸭鸭</div>
+                                                <small class="lg-item-text">213小时</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item media" href="">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">2</div>
+                                        </div>
+                                        <div class="pull-left">
+                                            <img class="lg-item-img" src="images/in2.jpg" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="pull-left">
+                                                <div class="lg-item-heading">清风</div>
+                                                <small class="lg-item-text">187小时</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item media" href="">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">3</div>
+                                        </div>
+                                        <div class="pull-left">
+                                            <img class="lg-item-img" src="images/in3.jpg" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="pull-left">
+                                                <div class="lg-item-heading">Freya</div>
+                                                <small class="lg-item-text">156小时</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="list-group-item media" href="">
+                                        <div class="pull-left">
+                                            <div class="lg-item-heading" style="height: 41.6px;margin: 18px 0 0;font-size: 24px;">35</div>
+                                        </div>
+                                        <div class="pull-left">
+                                            <img class="lg-item-img" src="images/in4.jpg" alt="">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="pull-left">
+                                                <div class="lg-item-heading">资资</div>
+                                                <small class="lg-item-text">78小时</small>
+                                            </div>
+                                            <div class="pull-right">
+                                                <div class="lg-item-heading">本人</div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 w3-agile-crd">
+                    <div class="card">
+                        <div class="card-body card-padding">
+                            <div class="widget">
+                                <header class="widget-header">
+                                    <h4 class="widget-title">学习记录</h4>
+                                </header>
+                                <hr class="widget-separator">
+                                <div class="widget-body">
+                                    <div class="streamline">
+                                        <div class="sl-item sl-primary">
+                                            <div class="sl-content">
+                                                <small class="text-muted">5分钟前</small>
+                                                <p>观看了3分钟《可视化导论》</p>
+                                            </div>
+                                        </div>
+                                        <div class="sl-item sl-danger">
+                                            <div class="sl-content">
+                                                <small class="text-muted">25分钟前</small>
+                                                <p>观看了20分钟《孟子》精读</p>
+                                            </div>
+                                        </div>
+                                        <div class="sl-item sl-success">
+                                            <div class="sl-content">
+                                                <small class="text-muted">3小时前</small>
+                                                <p>下载了《可视化导论》1.2节资料</p>
+                                            </div>
+                                        </div>
+                                        <div class="sl-item">
+                                            <div class="sl-content">
+                                                <small class="text-muted">7小时前</small>
+                                                <p>参与了课程《宇宙简史》</p>
+                                            </div>
+                                        </div>
+                                        <div class="sl-item sl-warning">
+                                            <div class="sl-content">
+                                                <small class="text-muted">1天前</small>
+                                                <p>观看了98分钟《可视化导论》</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <!--//photoday-section-->
+                <!--w3-agileits-pane-->
+                <div class="w3-agileits-pane">
+                    <div class="col-md-4 wthree-pan">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"> <i class="fa fa-bell fa-fw"></i> 通知面板 </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item"> <i class="fa fa-comment fa-fw"></i> 新评论 <span class="pull-right text-muted small"><em>4分钟前</em> </span> </a>
+                                    <a href="#" class="list-group-item"> <i class="fa fa-tasks fa-fw"></i> 课程学习提醒 <span class="pull-right text-muted small"><em>43分钟前</em> </span> </a>
+                                    <a href="#" class="list-group-item"> <i class="fa fa-upload fa-fw"></i> 待提交作业提醒 <span class="pull-right text-muted small"><em>上午11：32</em> </span> </a>
+                                    <a href="#" class="list-group-item"> <i class="fa fa-bolt fa-fw"></i> 待修改作业 <span class="pull-right text-muted small"><em>上午11：13/em> </span> </a>
+                                </div>
+                                <!-- /.list-group -->
+
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                    </div>
+                    <div class="col-md-8 agile-info-stat">
+                        <div class="stats-info stats-last widget-shadow">
+                            <table class="table stats-table ">
+                                <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>学习指标</th>
+                                    <th>状态</th>
+                                    <th>值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>专注度</td>
+                                    <td><span class="label label-success">进步</span></td>
+                                    <td><h5>25% <i class="fa fa-level-up"></i></h5></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>作业提交</td>
+                                    <td><span class="label label-warning">正常</span></td>
+                                    <td><h5>35% <i class="fa fa-level-up"></i></h5></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td>课程进度</td>
+                                    <td><span class="label label-danger">延后</span></td>
+                                    <td><h5 class="down">40% <i class="fa fa-level-down"></i></h5></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">4</th>
+                                    <td>课堂互动</td>
+                                    <td><span class="label label-info">达标</span></td>
+                                    <td><h5>100% <i class="fa fa-level-up"></i></h5></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="inner-block">
+
+                </div>
+
+            </div>
+
+<script th:src="@{/js/studentData-raphael-min.js}"></script>
+<script th:src="@{/js/studentData-morris.js}"></script>
+<script>
+	$(document).ready(function() {
+		//BOX BUTTON SHOW AND CLOSE
+	   jQuery('.small-graph-box').hover(function() {
+		  jQuery(this).find('.box-button').fadeIn('fast');
+	   }, function() {
+		  jQuery(this).find('.box-button').fadeOut('fast');
+	   });
+	   jQuery('.small-graph-box .box-close').click(function() {
+		  jQuery(this).closest('.small-graph-box').fadeOut(200);
+		  return false;
+	   });
+	   
+	    //CHARTS
+	    function gd(year, day, month) {
+			return new Date(year, month - 1, day).getTime();
+		}
+		
+		graphArea2 = Morris.Area({
+			element: 'hero-area',
+			padding: 10,
+        behaveLikeLine: true,
+        gridEnabled: false,
+        gridLineColor: '#dddddd',
+        axes: true,
+        resize: true,
+        smooth:true,
+        pointSize: 0,
+        lineWidth: 0,
+        fillOpacity:0.85,
+			data: [
+				{period: '2014 Q1', iphone: 2668, ipad: null, itouch: 2649},
+				{period: '2014 Q2', iphone: 15780, ipad: 13799, itouch: 12051},
+				{period: '2014 Q3', iphone: 12920, ipad: 10975, itouch: 9910},
+				{period: '2014 Q4', iphone: 8770, ipad: 6600, itouch: 6695},
+				{period: '2015 Q1', iphone: 10820, ipad: 10924, itouch: 12300},
+				{period: '2015 Q2', iphone: 9680, ipad: 9010, itouch: 7891},
+				{period: '2015 Q3', iphone: 4830, ipad: 3805, itouch: 1598},
+				{period: '2015 Q4', iphone: 15083, ipad: 8977, itouch: 5185},
+				{period: '2016 Q1', iphone: 10697, ipad: 4470, itouch: 2038},
+				{period: '2016 Q2', iphone: 8442, ipad: 5723, itouch: 1801}
+			],
+			lineColors:['#ff4a43','#a2d200','#22beef'],
+			xkey: 'period',
+            redraw: true,
+            ykeys: ['iphone', 'ipad', 'itouch'],
+            labels: ['All Visitors', 'Returning Visitors', 'Unique Visitors'],
+			pointSize: 2,
+			hideHover: 'auto',
+			resize: true
+		});
+		
+	   
+	});
+	</script>
+</body>
+</html>

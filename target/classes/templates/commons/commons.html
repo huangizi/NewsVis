@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--头部导航栏-->
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0" th:fragment="topbar">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#" th:text="${session.loginUser}"></a>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" th:href="@{/user/logout}">注销</a>
+        </li>
+    </ul>
+</nav>
+<!--侧边栏-->
+<nav class="col-md-2 d-none d-md-block bg-light sidebar" th:fragment="sidebar">
+    <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a th:class="${active=='main.html'?'nav-link active':'nav-link'}" th:href="@{/templates/index_1.html}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    首页 <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:class="${active=='studentInfo.html'?'nav-link active':'nav-link'}" th:href="@{/student/studentInfo}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                        <polyline points="13 2 13 9 20 9"></polyline>
+                    </svg>
+                    个人中心
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    Products
+                </a>
+            </li>
+            <li class="nav-item">
+                <a th:class="${active=='list.html'?'nav-link active':'nav-link'}" th:href="@{/emps}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    员工管理
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                    Integrations
+                </a>
+            </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Saved reports</span>
+            <a class="d-flex align-items-center text-muted" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Current month
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Last quarter
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Social engagement
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Year-end sale
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- sidebar Menu -->
+<!-- sidebar -->
+<div class="main_sidebar" th:fragment="sidebar-menu">
+    <div class="side-overlay" uk-toggle="target: #wrapper ; cls: collapse-sidebar mobile-visible"></div>
+
+    <!-- sidebar header -->
+    <div class="sidebar-header">
+        <h4> Navigation</h4>
+        <span class="btn-close" uk-toggle="target: #wrapper ; cls: collapse-sidebar mobile-visible"></span>
+    </div>
+
+    <!-- sidebar Menu -->
+    <div class="sidebar">
+        <div class="sidebar_innr" data-simplebar>
+
+            <div class="sections">
+                <h3> 浏览 </h3>
+                <ul>
+                    <li th:class="${active=='student-index.html'?'active':''}" > <a th:href="@{/studentIndex(student_id=${student_id})}"> <i class="uil-home-alt"></i> 主页 </a></li>
+                    <li th:class="${active=='student-info.html'?'active':''}"> <a th:href="@{/student/studentInfo(student_id=${student_id})}"> <i class="icon-feather-user"></i> 个人信息 </a></li>
+                    <li th:class="${active=='browse-follow-video.html'?'active':''}"> <a th:href="@{/course/follow(student_id=${student_id})}"> <i class="uil-users-alt"></i> 未看的视频 </a></li>
+                    <li th:class="${active=='student-join-course.html'?'active':''}"> <a th:href="@{/course/join(student_id=${student_id})}"> <i class="uil-layers"></i> 参与的课程 </a></li>
+                    <li th:class="${active=='student-data.html'?'active':''}"> <a th:href="@{/student/studentData(student_id=${student_id})}"> <i class="icon-feather-activity"></i> 学习数据 </a></li>
+                </ul>
+            </div>
+
+
+            <div class="sections">
+                <h3> 关注的教师 </h3>
+                <ul th:each="teacherFollow:${teacherFollows}">
+                    <li>
+                        <a th:href="@{/teacher/singleChannel(teacher_id=${teacherFollow.getTeacher_id()},student_id=${student_id})}" >
+                            <img th:src="@{'/img/avatars/avatar-'+${teacherFollow.getTeacher_id()}+'.jpg'}" alt="">
+                            [[${teacherFollow.getTeacher_name()}]]
+                            <span class="dot-notiv"></span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- view more subcription-->
+                <div class="uk-flex uk-flex-center mb-3">
+                    <a th:href="@{/teacher/browseChannals(student_id=${student_id})}" class="button default circle px-5">
+                        <i class="uil-plus mr-2"></i> 更多 </a>
+                </div>
+
+            </div>
+
+            <div class="sections">
+                <h3> 推荐的学校 </h3>
+                <ul th:each="school:${schools}">
+                    <li>
+                        <a th:href="@{/school/single(school_id=${school.getSchool_id()},student_id=${student_id})}" >
+                            <img th:src="${school.getSchool_logo_href()}" alt="">
+                            [[${school.getSchool_name()}]]
+                            <span class="dot-notiv"></span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- view more subcription-->
+                <div class="uk-flex uk-flex-center mb-3">
+                    <a th:href="@{/school/recommend(student_id=${student_id})}" class="button default circle px-5">
+                        <i class="uil-plus mr-2"></i> 更多 </a>
+                </div>
+
+            </div>
+
+            <div id="foot">
+
+                <ul>
+                    <li> <a href="#"> 关于作者 </a></li>
+                </ul>
+                <div class="foot-content">
+                    <p>版权所有 &copy; 江南大学<strong>资源</strong> </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer
+================================================== -->
+<div class="footer" th:fragment="footer">
+        <div class="uk-grid-collapse" uk-grid>
+            <div class="uk-width-expand@s uk-first-column">
+                <p>版权所有 &copy; 江南大学资源 </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- header -->
+<div id="main_header" th:fragment="main_header">
+    <header>
+
+        <!-- Logo-->
+        <i class="header-traiger uil-bars"
+           uk-toggle="target: #wrapper ; cls: collapse-sidebar mobile-visible"></i>
+
+        <!-- Logo-->
+        <div id="logo">
+            <a href="#"> <img src="assets/images/logo.png" alt=""></a>
+            <a href="#"> <img src="assets/images/logo-light.png" class="logo-inverse" alt=""></a>
+        </div>
+
+        <!-- form search-->
+        <div class="head_search">
+            <form>
+                <div class="head_search_cont">
+                    <input value="" type="text" class="form-control"
+                           placeholder="搜索课程.." autocomplete="off">
+                    <i class="s_icon uil-search-alt"></i>
+                </div>
+
+                <!-- Search box dropdown -->
+                <div uk-dropdown="pos: top;mode:click;animation: uk-animation-slide-bottom-small"
+                     class="dropdown-search">
+                    <!-- User menu -->
+                    <style>
+                        li::after {
+                            display:none !important;
+                        }
+                    </style>
+
+                    <ul class="dropdown-search-list">
+                        <li class="list-title"> 最近搜索 </li>
+                        <li> <a href="single-video.html"> 北京大学 </a> </li>
+                        <li> <a href="single-video.html"> 数据可视化 </a></li>
+                        <li> <a href="single-video.html"> 陈为</a> </li>
+                        <li> <a href="single-video.html"> 计算机基础</a> </li>
+<!--                        <div class="menu-divider">-->
+<!--                            <li class="list-footer"> <a href="your-history.html"> Searches History </a></li>-->
+<!--                            </div>-->
+                    </ul>
+
+                </div>
+
+
+            </form>
+        </div>
+
+        <!-- user icons -->
+        <div class="head_user">
+
+<!--            <a href="#" class="btn-upgrade uk-visible@s"> <i class="uil-bolt-alt"></i></a>-->
+<!--            <a href="#" class="btn-upload uk-visible@s"> <i class="uil-cloud-upload"></i> Upload</a>-->
+
+            <!-- upload dropdown box -->
+            <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"
+                 class="dropdown-notifications">
+
+                <!-- notivication header -->
+                <div class="dropdown-notifications-headline">
+                    <h4>Upload Video</h4>
+                </div>
+
+                <!-- notification contents -->
+                <div class="dropdown-notifications-content uk-flex uk-flex-middle uk-flex-center text-center">
+
+
+                    <div class="uk-flex uk-flex-column choose-upload  text-center">
+                        <img src="assets/images/upload.png" width="70" class="m-auto" alt="">
+                        <p class="my-3"> Do you have a video wants to share us <br> please upload her ..
+                        </p>
+                        <div uk-form-custom>
+                            <input type="file">
+                            <a href="#" class="button soft-warning small"> Choose file</a>
+                        </div>
+
+                        <a href="#" class="uk-text-muted mt-3 uk-link"
+                           uk-toggle="target: .choose-upload ;  animation: uk-animation-slide-right-small, uk-animation-slide-left-medium; queued: true">
+                            Or Import Video </a>
+                    </div>
+
+                    <div class="uk-flex uk-flex-column choose-upload" hidden>
+                        <i class="uil-import icon-large text-muted"></i>
+                        <p class="my-3"> Import videos from YouTube <br> Copy / Paste your video link here </p>
+                        <form class="uk-grid-small" uk-grid>
+                            <div class="uk-width-expand">
+                                <input type="text" class="uk-input uk-form-small" placeholder="Paste link">
+                            </div>
+                            <div class="uk-width-auto"> <button type="submit" class="button soft-warning">
+                                Import </button> </div>
+                        </form>
+                        <a href="#" class="uk-text-muted mt-3 uk-link"
+                           uk-toggle="target: .choose-upload ; animation: uk-animation-slide-left-small, uk-animation-slide-right-medium; queued: true">
+                            Or Upload Video </a>
+                    </div>
+
+
+
+                </div>
+                <hr class="m-0">
+                <div class="text-center uk-text-small py-2 uk-text-muted"> Your Video size Must be Maxmium 999MB
+                </div>
+            </div>
+
+
+            <!-- videos feed  -->
+            <a th:href="@{/course/follow(student_id=${student_id})}" class="opts_icon" > <i class="uil-youtube-alt"></i> <span>9+</span>  </a>
+
+            <!-- videos feed  offcanvas-->
+<!--            <div id="video" uk-offcanvas="overlay: true ;flip: true">-->
+<!--&lt;!&ndash;                <div class="uk-offcanvas-bar uk-width-large">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <h3> Your Subscription </h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <hr class="mb-3" style="margin:0 -20px">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button class="uk-offcanvas-close" type="button" uk-close></button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <div class="video-list-small uk-child-width-1-1" uk-grid>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="single-video.html" class="video-post video-post-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-count">1.4M</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-time">23:00</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="play-btn-trigger"></span>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                    <img src="assets/images/video-thumbal/2.png" alt="">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Content &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <h3> How to create a basic Sticky HTML element..</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/avatars/avatar-3.jpg" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-user">Jonathan Madano</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-views">531k views</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-date"> 2 weeks ago </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="single-video.html" class="video-post video-post-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-count">2.7k</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-time">40:00</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="play-btn-trigger"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/video-thumbal/1.png" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Content &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <h3> Learn how to create PHP singleton class </h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/avatars/avatar-2.jpg" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-user">Stella Johnson</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-views">938k views</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-date"> 3 weeks ago </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="single-video.html" class="video-post video-post-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-count">2.3M</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-time">14:00</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="play-btn-trigger"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/video-thumbal/3.png" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Content &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <h3> Learn Creating Laravel Package Initializing ... </h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/avatars/avatar-5.jpg" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-user">Alex Dolgove</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-views">531k views</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-date"> 2 weeks ago </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="single-video.html" class="video-post video-post-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-count">1.4M</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-time">23:00</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="play-btn-trigger"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/video-thumbal/4.png" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Content &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <h3> Learn how to upload files using Laravel .. </h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/avatars/avatar-4.jpg" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-user">Adrian Mohani</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-views">531k views</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-date"> 2 weeks ago </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="single-video.html" class="video-post video-post-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-count">1.4M</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-time">23:00</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="play-btn-trigger"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/video-thumbal/2.png" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Content &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <h3> How to create a basic Sticky HTML element ..</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/avatars/avatar-3.jpg" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-user">Jonathan Madano</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-views">531k views</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-date"> 2 weeks ago </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a href="single-video.html" class="video-post video-post-list">&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Thumbnail &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-thumbnail">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-count">2.7k</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-time">40:00</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="play-btn-trigger"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/video-thumbal/1.png" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                &lt;!&ndash; Blog Post Content &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="video-post-content">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <h3> Learn how to create PHP singleton class </h3>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <img src="assets/images/avatars/avatar-2.jpg" alt="">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-user">Stella Johnson</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-views">938k views</span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <span class="video-post-date"> 3 weeks ago </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </div>-->
+
+
+            <!-- browse apps  -->
+<!--            <a href="#" class="opts_icon uk-visible@s"> <i class="uil-apps"></i> </a>-->
+
+            <!-- browse apps dropdown -->
+<!--            <div uk-dropdown="pos: top;mode:click ; animation: uk-animation-scale-up" class="icon-browse">-->
+
+<!--                <a href="#" class="icon-menu-item"> <i class="uil-shop"></i> Dashboard </a>-->
+<!--                <a href="#" class="icon-menu-item"> <i class="uil-envelope-alt"></i> Messages </a>-->
+<!--                <a href="#" class="icon-menu-item"> <i class="uil-bookmark"></i> Bookmark </a>-->
+<!--                <a href="#" class="icon-menu-item"> <i class="uil-shopping-basket"></i> Cart </a>-->
+<!--                <a href="#" class="icon-menu-item"> <i class="uil-shield-check"></i> Privacy </a>-->
+<!--                <a href="#" class="icon-menu-item"> <i class="uil-bolt-alt"></i> Upgrade </a>-->
+<!--                <a href="#" class="more-app"> More Features</a>-->
+<!--            </div>-->
+
+
+            <!-- Message  notificiation dropdown -->
+            <a th:href="@{/chatroom}" class="opts_icon"> <i class="uil-envelope-alt"></i> <span>4</span> </a>
+
+            <!-- Message  notificiation dropdown -->
+            <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"
+                 class="dropdown-notifications">
+
+                <!-- notivication header -->
+                <div class="dropdown-notifications-headline">
+                    <h4>消息</h4>
+                    <a href="#">
+                        <i class="icon-feather-settings" uk-tooltip="title: Message settings ; pos: left"></i>
+                    </a>
+                </div>
+
+                <!-- notification contents -->
+                <div class="dropdown-notifications-content" data-simplebar>
+
+                    <!-- notiviation list -->
+                    <ul>
+                        <li class="notifications-not-read">
+                            <a href="#">
+                                        <span class="notification-avatar">
+                                            <img th:src="@{/img/avatars/avatar-1102170113.jpg}" alt="">
+                                        </span>
+                                <div class="notification-text notification-msg-text">
+                                    <strong>鸭鸭</strong>
+                                    <p>你数据可视化作业交了吗？</p>
+                                    <span class="time-ago"> 2小时前</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                        <span class="notification-avatar">
+                                            <img th:src="@{/img/avatars/avatar-1102170114.jpg}" alt="">
+                                        </span>
+                                <div class="notification-text notification-msg-text">
+                                    <strong>清风</strong>
+                                    <p> 同学，请问你是电子科技大学的学生吗？
+                                    </p>
+                                    <span class="time-ago"> 7小时前 </span>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                        <span class="notification-avatar">
+                                            <img th:src="@{/img/avatars/avatar-1102170112.jpg}" alt="">
+                                        </span>
+                                <div class="notification-text notification-msg-text">
+                                    <strong>Freya</strong>
+                                    <p>谢谢呀</p>
+                                    <span class="time-ago"> 19小时前 </span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="dropdown-notifications-footer">
+                    <a th:href="@{/chatroom(student_id=${student_id})}"> 查看全部 <i class="icon-line-awesome-long-arrow-right"></i> </a>
+                </div>
+
+
+            </div>
+
+
+            <!-- notificiation icon  -->
+            <a href="#" class="opts_icon"> <i class="uil-bell"></i> <span>3</span> </a>
+
+            <!-- notificiation dropdown -->
+            <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"
+                 class="dropdown-notifications">
+
+                <!-- notivication header -->
+                <div class="dropdown-notifications-headline">
+                    <h4>提醒</h4>
+                    <a href="#">
+                        <i class="icon-feather-settings"
+                           uk-tooltip="title: Notifications settings ; pos: left"></i>
+                    </a>
+                </div>
+
+                <!-- notification contents -->
+                <div class="dropdown-notifications-content" data-simplebar>
+
+                    <!-- notiviation list -->
+                    <ul>
+                        <li class="notifications-not-read">
+                            <a href="#">
+                                        <span class="notification-icon">
+<!--                                            <i class="icon-feather-thumbs-up"></i></span>-->
+                                            <i class="icon-line-awesome-comments-o"></i></span>
+                                <span class="notification-text">
+                                            <strong>评论</strong> 鸭鸭评论了你的评论
+<!--                                            <span class="text-primary">Learn Prototype Faster</span>-->
+                                            <br> <span class="time-ago"> 4分钟前 </span>
+                                        </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                        <span class="notification-icon">
+                                            <i class="icon-material-outline-access-alarm"></i></span>
+                                <span class="notification-text">
+                                            <strong>提醒</strong> 有教师发布了新的学习视频
+<!--                                            <span class="text-primary">Full Stack PHP Developer</span>-->
+                                            <br> <span class="time-ago"> 43分钟前 </span>
+                                        </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                        <span class="notification-icon">
+                                            <i class="icon-material-outline-access-alarm"></i></span>
+                                <span class="notification-text">
+                                            <strong>作业</strong> 有一个新的作业待提交
+<!--                                            <span class="text-primary">Adobe XD Tutorial</span>-->
+                                            <br> <span class="time-ago"> 上午11:32 </span>
+                                        </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                        <span class="notification-icon">
+                                            <i class="icon-line-awesome-pencil"></i></span>
+                                <span class="notification-text">
+                                            <strong>修改</strong> 有一个作业待修改
+<!--                                            <span class="text-primary">Learn Prototype Faster</span>-->
+                                            <br> <span class="time-ago"> 上午11:13 </span>
+                                        </span>
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+
+
+            </div>
+            <!-- profile -image -->
+            <a class="opts_account"> <img th:src="@{'/img/avatars/avatar-' +${student_id} + '.jpg'}" alt=""></a>
+
+            <!-- profile dropdown-->
+            <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"
+                 class="dropdown-notifications small">
+
+                <!-- User Name / Avatar -->
+                <a href="#">
+
+                    <div class="dropdown-user-details">
+                        <div class="dropdown-user-avatar">
+                            <img src="assets/images/avatars/avatar-1.jpg" alt="">
+                        </div>
+                        <div class="dropdown-user-name" >
+                            {{studentInfo.getUsername()}}  <span> 认证通过 <i class="uil-check"></i> </span>
+                        </div>
+                    </div>
+
+                </a>
+
+                <!-- User menu -->
+
+                <ul class="dropdown-user-menu">
+<!--                    <li><a href="#"> <i class="uil-bolt"></i> Go PRO</a> </li>-->
+<!--                    <li><a href="#"> <i class="uil-user"></i> My Channal </a> </li>-->
+<!--                    <li><a href="#"> <i class="uil-thumbs-up"></i> Liked Videos </a></li>-->
+<!--                    <li><a href="#"> <i class="uil-history"></i> Watch Later </a></li>-->
+<!--                    <li><a href="#"> <i class="uil-cog"></i> Account Settings</a></li>-->
+<!--                    <li><a href="#" style="color:#ff8400"> <i class="uil-bolt"></i> Upgrade To Premium</a> </li>-->
+                    <li>
+                        <a href="#" id="night-mode" class="btn-night-mode">
+                            <i class="icon-feather-moon"></i> 夜间模式
+                            <span class="btn-night-mode-switch">
+                                        <span class="uk-switch-button"></span>
+                                    </span>
+                        </a>
+                    </li>
+                    <div class="menu-divider">
+                        <li><a href="#"> <i class="icon-feather-help-circle"></i>帮助</a>
+                        </li>
+                        <li><a href="#"> <i class="icon-feather-log-out"></i>退出</a>
+                        </li>
+                </ul>
+
+
+            </div>
+
+        </div>
+
+    </header>
+
+</div>
+</html>

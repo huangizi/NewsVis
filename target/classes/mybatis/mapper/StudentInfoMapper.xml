@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freya.onlinetech.mapper.StudentInfoMapper">
+    <select id="queryStudentById" resultType="StudentInfo">
+        select * from studentinfo where id=#{id};
+    </select>
+
+    <insert id="addStudent" parameterType="StudentInfo">
+        insert into studentinfo(username,password,email,phoneNumber,schoolName,major)
+        values (#{username},#{password},#{email},#{phoneNumber},#{schoolName},#{major});
+    </insert>
+
+    <update id="updateStudent" parameterType="StudentInfo">
+        update studentinfo set username=#{username},password=#{password},password=#{password}
+                      ,email=#{email},phoneNumber=#{phoneNumber},schoolName=#{schoolName}
+                      ,major=#{major}
+        where id=#{id};
+    </update>
+
+    <delete id="deleteStudent" parameterType="int">
+        delete from studentinfo where id=#{id};
+    </delete>
+
+    <select id="queryStudentByName" resultType="StudentInfo">
+        select * from studentinfo where username=#{username};
+    </select>
+</mapper>

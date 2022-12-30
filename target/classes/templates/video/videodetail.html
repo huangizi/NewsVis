@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" th:href="@{/img/favicon.png}">
+
+    <!-- CSS 
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/night-mode.css}">
+    <link rel="stylesheet" th:href="@{/css/framework.css}">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" th:href="@{/css/icons.css}">
+
+
+</head>
+
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper" class="sidebar-out">
+
+        <!--side-bar-menu-->
+        <div th:replace="~{commons/commons::sidebar-menu}"></div>
+        <!--header-->
+        <div th:replace="~{commons/commons::main_header}"></div>
+
+        <!-- contents -->
+        <div class="main_content content-expand">
+            <div class="main_content_inner">
+
+
+                <div uk-grid>
+                    <div class="uk-width-2-3@m">
+
+                        <div id="video-box" uk-sticky="top: 400 ;media : @s"
+                            cls-active="video-resized uk-animation-slide-right;">
+                            <span class="icon-feather-x btn-box-close"
+                                uk-toggle="target: #video-box ; cls: video-resized-hedden uk-animation-slide-left"></span>
+
+                            <div class="embed-video">
+<!--                                src="//player.bilibili.com/player.html?aid=467824602&bvid=BV195411S7cW&cid=564517201&page=1"-->
+<!--                                <iframe width="560" height="315" src="https://www.youtube.com/embed/_WUY3wgxFeg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+                                <iframe th:src="${videoInfo.getVideo_href()}" frameborder="0"
+                                        uk-video="automute: true" allowfullscreen uk-responsive></iframe>
+<!--                                <iframe src="https://www.youtube.com/embed/_WUY3wgxFeg" frameborder="0"-->
+<!--                                    uk-video="automute: true" allowfullscreen uk-responsive></iframe>-->
+                            </div>
+                        </div>
+
+                        <div class="video-info mt-3">
+
+                            <!-- video title -->
+                            <div class="video-info-title">
+                                <h1 th:text="${videoInfo.getVideo_name()}"> </h1>
+                            </div>
+
+                            <div class="uk-flex uk-flex-between">
+
+                                <div class="video-info-details">
+                                    <span id="span-video-view-num"></span>
+                                </div>
+                                <div class="video-likes">
+                                    <div class="like-btn" uk-tooltip="I like it">
+                                        <i class="uil-thumbs-up"></i>
+                                        <span class="likes" th:text="${videoInfo.getVideo_good_num()}"></span>
+                                    </div>
+                                    <div class="video-info-element">
+                                        <div class="views-bar"></div>
+                                        <div class="views-bar blue" th:style="'width:'+${video_good_rate}+'%'"></div>
+                                    </div>
+                                    <div class="like-btn" uk-tooltip="I Hate it">
+                                        <i class="uil-thumbs-down"></i>
+                                        <span class="likes" th:text="${videoInfo.getVideo_bad_num()}"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="uk-flex uk-flex-between uk-flex-middle" uk-grid>
+                                <div class="user-details-card uk-width-expand">
+                                    <a href="../teacher/single-channel.html" class="uk-flex">
+                                        <div class="user-details-card-avatar">
+                                            <img th:src="@{'/img/avatars/avatar-'+${teacherInfo.getTeacher_id()}+'.jpg'}" alt="">
+                                        </div>
+                                        <div class="user-details-card-name" >
+                                            [[${teacherInfo.getTeacher_name()}]]
+                                            <span th:text="'发布于 ' + ${#dates.format(videoInfo.getVideo_add_time(), 'yyyy-MM-dd')}">  </span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="uk-width-auto uk-flex">
+
+
+                                    <div class="btn-subscribe" id="div-teacher-follow">
+                                        <button id="btn-teacher-follow" href="#" th:class="${teacherIsFollow==true?'button disabled':'button danger'}">
+                                            <i class="icon-feather-plus" th:if="${teacherIsFollow} eq false"></i>
+                                            <i class="icon-material-outline-check" th:if="${teacherIsFollow} eq true"></i>
+                                            [[${teacherIsFollow}==true?'已经关注':'关注']]
+                                        </button>
+                                        <span class="subs-amount" id="span_show_fan_num" ></span>
+                                    </div>
+
+                                </div>
+                            </div>
+ 
+                            <hr class="mt-0 mb-2">
+ 
+
+                            <h2>课程描述</h2>
+                            <div th:object="${courseDetail}">
+                                <p  th:text="*{course_description}"> </p>
+                            </div>
+
+                            <div class="about-ch-sec mb-lg-6">
+                                <div class="abt-rw">
+                                    <h4>课程类别：</h4>
+                                    <ul>
+                                        <li><span th:text="${courseDetail.course_category}"></span></li>
+                                    </ul>
+                                </div>
+
+                                <style>
+                                    ul{
+                                        list-style: none;
+                                    }
+                                    li{
+                                        display: inline;
+                                    }
+                                    li:not(:last-child)::after{
+                                        content: "|";
+                                    }
+                                </style>
+
+                                <div class="abt-rw tgs">
+                                    <h4>标签：</h4>
+                                    <ul th:each="tags:${CourseTags}">
+                                        <li style="float:left;padding:5px">
+                                            <a href="#" title="" th:text="${tags}" ></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <hr>
+
+                        <div class="comments mt-4">
+                            <h3> 课程评论 <span class="comments-amount" th:text="${commentsSize}"></span> </h3>
+
+                            <ul th:each="commentRoot:${commentsRoot}">
+                                <li>
+                                    <div class="avatar"><img th:src="@{'/img/avatars/'+${commentRoot.getOwner_avatar()}}" alt="">
+                                    </div>
+                                    <div class="comment-content">
+                                        <div class="comment-by">
+                                            <div class="comment-by" th:text="${commentRoot.getOwner_name()}"></div>
+                                            <span th:text="${commentRoot.getOwner_identity()} + ' ' + ${#dates.format(commentRoot.getCreate_time(),'yyyy-MM-dd')}"></span>
+                                            <a href="#" class="reply" ><i class="icon-line-awesome-undo"></i>回复</a>
+                                        </div>
+                                        <p th:text="${commentRoot.getContent()}"> </p>
+                                    </div>
+
+                                    <ul th:each="commentReply:${commentRoot.getCommentsReplyList()}">
+                                        <li>
+                                            <div class="avatar"><img th:src="@{'/img/avatars/'+${commentReply.getFrom_avatar()}}" alt="">
+                                            </div>
+                                            <div class="comment-content">
+                                                <div class="comment-by" >
+                                                    <div class="comment-by" th:text="${commentReply.getFrom_name()}"></div>
+                                                    <span th:text="${commentReply.getFrom_identity()}+ ' ' + ${#dates.format(commentReply.getCreate_time(),'yyyy-MM-dd')}"></span>
+                                                    <a href="#" class="reply" th:if="${commentRoot.getCommentsReplyList().size()}"><i class="icon-line-awesome-undo"></i>
+                                                        回复</a>
+                                                </div>
+                                                <p th:text="${commentReply.getContent()}"></p>
+                                            </div>
+                                        </li>
+                                    </ul>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                        <div class="comments">
+                            <h4>留下你的评论</h4>
+                            <ul>
+                                <li>
+                                    <div class="avatar"><img  th:src="@{'/img/avatars/avatar-' +${student_id} + '.jpg'}" alt="">
+                                    </div>
+
+                                    <div class="comment-content">
+                                        <form class="uk-grid-small" uk-grid>
+                                            <div class="uk-width-1-1@s">
+                                                <label class="uk-form-label">评论</label>
+                                                <textarea class="uk-textarea" placeholder="请输入评论..."
+                                                    style=" height:160px"></textarea>
+                                            </div>
+                                            <div class="uk-grid-margin">
+                                                <input type="submit" value="提交" class="button warning">
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <div class="uk-width-expand@m">
+
+                        <div class="uk-flex uk-flex-middle uk-flex-between px-1 pb-3">
+                            <p class="mb-0 uk-h5"> 自动播放 </p>
+
+                            <label class="btn-switch">
+                                <input type="checkbox">
+                                <span class="btn-switch-slider" uk-toggle="target: #wrapper; cls: menu-small"></span>
+                            </label>
+
+                        </div>
+                        <ul class="video-list-small uk-child-width-1-1@m uk-child-width-1-2@s" uk-grid id="div-video-info">
+
+                            <li th:each="videoFollow:${videoFollows}">
+                                <a th:href="@{/video/detail(course_id=${videoFollow.getVideo_course_id()},video_id=${videoFollow.getVideo_id()},student_id=${student_id})}" class="video-post video-post-list">
+                                    <!-- Blog Post Thumbnail -->
+                                    <div class="video-post-thumbnail">
+                                        <span class="video-post-count" id="span-watch-num"></span>
+                                        <span class="video-post-time" th:text="${videoFollow.getVideo_times()}+'分钟'"></span>
+                                        <span class="play-btn-trigger"></span>
+
+                                        <img th:src="'/img/course/course_'+${videoFollow.getVideo_course_id()}+'.jpg'" alt="">
+
+                                    </div>
+
+                                    <!-- Blog Post Content -->
+                                    <div class="video-post-content">
+                                        <h3 th:text="${videoFollow.getVideo_name()}">  </h3>
+                                        <img th:src="'/img/avatars/avatar-'+${videoFollow.getVideo_teacher_id()}+'.jpg'" alt="">
+<!--                                        <span class="video-post-user">Jonathan Madano</span>-->
+<!--                                        <span class="video-post-views">531k views</span>-->
+<!--                                        <span class="video-post-date"> 2 weeks ago </span>-->
+                                        <p>
+
+                                        </p>
+                                        <!-- option menu -->
+                                        <span class="btn-option">
+                                            <i class="icon-feather-more-vertical"></i>
+                                        </span>
+                                        <div class="dropdown-option-nav"
+                                            uk-dropdown="pos: bottom-right ;mode : hover ;animation: uk-animation-slide-bottom-small">
+                                            <ul>
+                                                <li>
+                                                    <span> <i class="uil-history"></i>稍后再看</span>
+                                                </li>
+                                                <li>
+                                                    <span> <i class="uil-bookmark"></i>添加书签</span>
+                                                </li>
+                                                <li>
+                                                    <span> <i class="uil-share-alt"></i>分享</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+
+
+                        </ul>
+
+
+                    </div>
+
+
+                </div>
+                <!--footer-->
+                <div th:replace="~{commons/commons::footer}"></div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- For Night mode -->
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+
+    <!-- javaScripts
+                ================================================== -->
+    <script th:src="@{/js/framework.js}"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/simplebar.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/numberDeal.js}"></script>
+    <script th:inline="javascript">
+        <!--设置视频的观看数量-->
+        var video_view_num = [[${videoInfo.getVideo_view_num()}]];
+        var span_video_view_num = document.getElementById("span-video-view-num");
+        span_video_view_num.textContent = getUnitNumber(video_view_num) + ' 次观看';
+        //设置老师的粉丝数
+        var fan_num = [[${teacherInfo.getTeacher_follow_num()}]];
+        var span_show_fan_num = document.getElementById("span_show_fan_num");
+        span_show_fan_num.textContent = getUnitNumber(fan_num);
+    </script>
+    <script th:inline="javascript">
+        function getUnitNumber(value)
+        {
+            let newValue = ['', '', ''];
+            let fr = 1000;
+            const ad = 1;
+            let num = 3;
+            const fm = 1;
+            while (value / fr >= 1) {
+                fr *= 10;
+                num += 1;
+                //console.log('数字', value / fr, 'num:', num);
+            }
+            if (num <= 4) { // 千
+                newValue[1] = '千';
+                newValue[0] = parseInt((value / 1000).toFixed(1)) + '';
+                console.log(newValue[0]);
+            } else if (num <= 8) { // 万
+                const text1 = parseInt(num - 4) / 3 > 1 ? '千万' : '万';
+                // tslint:disable-next-line:no-shadowed-variable
+                const fm = '万' === text1 ? 10000 : 10000000;
+                newValue[1] = text1;
+                newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+                console.log(newValue[0]);
+            } else if (num <= 16) {// 亿
+                let text1 = (num - 8) / 3 > 1 ? '千亿' : '亿';
+                text1 = (num - 8) / 4 > 1 ? '万亿' : text1;
+                text1 = (num - 8) / 7 > 1 ? '千万亿' : text1;
+                // tslint:disable-next-line:no-shadowed-variable
+                let fm = 1;
+                if ('亿' === text1) {
+                    fm = 100000000;
+                } else if ('千亿' === text1) {
+                    fm = 100000000000;
+                } else if ('万亿' === text1) {
+                    fm = 1000000000000;
+                } else if ('千万亿' === text1) {
+                    fm = 1000000000000000;
+                }
+                newValue[1] = text1;
+                newValue[0] = parseInt((value / fm).toFixed(1)) + '';
+            }
+            if (value < 1000) {
+                newValue[1] = '';
+                newValue[0] = value + '';
+            }
+            return newValue.join('');
+        }
+        //设置老师的粉丝数
+        var fan_num = [[${teacherInfo.getTeacher_follow_num()}]];
+        var span_show_fan_num = document.getElementById("span_show_fan_num");
+        span_show_fan_num.textContent = getUnitNumber(fan_num);
+
+        //设置推荐视频的格式
+        var videoFollows = [[${videoFollows}]];
+        var p_li = document.getElementById("div-video-info").getElementsByTagName('p');
+        console.log(p_li);
+        var span_video_num = document.getElementById("div-video-info").getElementsByClassName('video-post-count');
+        for(var i=0;i<p_li.length;i++) {
+            var videoFollow = videoFollows[i];
+            //显示有多少次观看和发布时间
+            var video_view_num = videoFollow.video_view_num;
+            var fan_video_text = getUnitNumber(video_view_num) + '观看 ';
+            var text_video_num = getUnitNumber(video_view_num);
+            //设置时间
+            var text_time = videoFollow.video_add_time;
+            var format_time = new Date(text_time);
+            let y=format_time.getFullYear().toString();
+            let m=(format_time.getMonth()+1).toString();
+            let d=format_time.getDate().toString();
+            format_time = y+"年"+m+"月"+d+"日"
+            p_li[i].innerHTML=
+                "<span class='video-post-user'> " + videoFollow.teacher_name + "</span>" +
+                "<span class='video-post-views'>" + fan_video_text + "</span>" +
+                "<span class='video-post-date'>发布于" +format_time+ "</span>"
+            span_video_num[i].textContent = text_video_num
+        }
+    </script>
+    <script th:inline="javascript">
+        // $(document).ready(function (){
+        //     $("#btn-teacher-follow").click(function (){
+        //         teacherFollowBtnOnClick();
+        //     })
+        //
+        // })
+        var fan_num = [[${teacherInfo.getTeacher_follow_num()}]];
+        var span_show_fan_num = document.getElementById("span_show_fan_num");
+        span_show_fan_num.textContent = getUnitNumber(fan_num);
+        $("body").delegate("#btn-teacher-follow","click",function (){
+            teacherFollowBtnOnClick();
+        })
+        function teacherFollowBtnOnClick(){
+            // var search = {}
+            // search["username"] = "zizi";
+            $.ajax({
+                type:"post", //向服务器发送的数据，服务器解析数据的方式 【静态文件用get。向服务器发送请求用post】
+                url:"/student/followTeacher",//发送路径
+                async:false,//是否异步，否。将其改成同步
+                data:{'student_id':[[${student_id}]],'teacher_id':[[${teacher_id}]]},//传递的参数【使用json格式】
+                dataType:"json",//数据格式
+                success:function(response){//成功的时候执行什么操作
+                    //如果变成了未关注
+                    if(response.followStatus == 'no' && response.error == 'no'){
+                        $("#div-teacher-follow").empty();
+                        $("#div-teacher-follow").append("<button id='btn_teacher_follow' class='button danger' onclick='teacherFollowBtnOnClick()'>"+
+                            "<i class='icon-feather-plus'></i>"+
+                            "关注"+
+                            "</button>"+
+                            "<span class='subs-amount' id='span_show_fan_num'></span>"
+                        )
+                    }else if (response.followStatus == 'yes' && response.error == 'no'){
+                        //状态是已经关注
+                        $("#div-teacher-follow").empty();
+                        $("#div-teacher-follow").append("<button id='btn_teacher_follow' class='button disabled' onclick='teacherFollowBtnOnClick()'>"+
+                            "<i class='icon-material-outline-check'></i>"+
+                            "已经关注"+
+                            "</button>"+
+                            "<span class='subs-amount' id='span_show_fan_num'></span>"
+                        )
+                    }else if(response.error == 'yes'){
+                        if(response.followStatus == 'no'){
+                            alert("添加关注失败，请稍后再试!");
+                        }else if(response.followStatus == 'yes'){
+                            alert("取消关注失败，请稍后再试!");
+                        }
+                    }
+                    //设置老师的粉丝数
+                    var fan_num = [[${teacherInfo.getTeacher_follow_num()}]];
+                    var span_show_fan_num = document.getElementById("span_show_fan_num");
+                    span_show_fan_num.textContent = getUnitNumber(fan_num);
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
