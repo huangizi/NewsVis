@@ -35,13 +35,14 @@ public class IndexController {
         model.addAttribute("newsTitle",newsTitle);
         System.out.println(newsTitle);
         //词云统计
-        Map<String,Object> WordCloudMap = new HashMap<>();
-        WordCloudMap.put("az",3);
-        WordCloudMap.put("b",6);
-        WordCloudMap.put("c",8);
-        WordCloudMap.put("d",2);
-        JSONObject json = new JSONObject(WordCloudMap);
-        System.out.println(json);
+        //Map<String,Object> WordCloudMap = new HashMap<>();
+        Map<String, Integer> WordCloudMap = newsService.getCloudText();
+//        WordCloudMap.put("az",3);
+//        WordCloudMap.put("b",6);
+//        WordCloudMap.put("c",8);
+//        WordCloudMap.put("d",2);
+       //JSONObject json = new JSONObject(WordCloudMap);
+        //System.out.println(json);
 //        List<String> WordCloud_key = new ArrayList<>();
 //        for (String key:WordCloudMap.keySet())
 //        {
@@ -56,7 +57,7 @@ public class IndexController {
 //        Collection<Integer> WordCloud_values = WordCloudMap.values();
 //        model.addAttribute("WordCloud_key",WordCloud_key);
 //        model.addAttribute("WordCloud_values",WordCloud_values);
-        model.addAttribute("WordCloud",json);
+        model.addAttribute("WordCloud",WordCloudMap);
         return "index";
         //return "redirect:/chatroom";
     }

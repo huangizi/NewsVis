@@ -9,4 +9,9 @@
         SELECT news.title,news.id FROM news  order by news.id desc LIMIT 10;
     </select>
 
+    <select id="getGuanchazhe" resultType="Guanchazhe">
+        SELECT * FROM guanchazhe;
+    </select>
+
+
 </mapper>
